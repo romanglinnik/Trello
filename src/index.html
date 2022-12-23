@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,9 +9,106 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/media.css">
 </head>
-<body>
-    
 
-    <script src="./js/script.js"></script>
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <h1>Trello</h1>
+            <div class="header__clock"></div>
+        </div>
+        <div class="section__board">
+            <div class="column column__todo">
+                <div class="column__header">
+                    <h4>TODO:</h4>
+                    <span class="todo__counter">0</span>
+                </div>
+                <div class="column__panel_wrapper">
+                    <div class="column__panel panel__todo">
+                    </div>
+                </div>
+                <button class="button button__todo-add">Add todo</button>
+            </div>
+            <div class="column column__progress">
+                <div class="column__header">
+                    <h4>IN PROGRESS:</h4>
+                    <span class="progress__counter">0</span>
+                </div>
+                <div class="column__panel_wrapper">
+                    <div class="column__panel panel__progress"></div>
+                </div>
+            </div>
+            <div class="column column__done">
+                <div class="column__header">
+                    <h4>DONE:</h4>
+                    <span class="done__counter ">0</span>
+                </div>
+                <div class="column__panel_wrapper">
+                    <div class="column__panel panel__done">
+                    </div>
+                </div>
+                <button class="button button__done-delete">Delete all</button>
+            </div>
+        </div>
+    </div>
+    <!-- !____________Модальные окна______________________________ -->
+    <div class="module module__entry">
+        <span class="module__background"></span>
+        <!-- !____Модальное окно записи карточки________________ -->
+        <div class="entry__container">
+            <input class="entry__title" type="text" placeholder="Title">
+            <!-- *__________________________________________________ -->
+            <div class="entry__check">
+                <div class="check__container">
+                    <label class="check__background" for="important">
+                        <input class="check__box important" type="checkbox" name="" id="important">
+                        <span class="check__icon"></span>
+                    </label>
+                    <p class="check__label">it is important?</p>
+                </div>
+                <div class="check__container">
+                    <label class="check__background" for="urgently">
+                        <input class="check__box urgently" type="checkbox" name="" id="urgently">
+                        <span class="check__icon"></span>
+                    </label>
+                    <p class="check__label">it is urgent?</p>
+                </div>
+            </div>
+            <!-- *__________________________________________________ -->
+            <textarea class="entry__content" name="entry" id="" cols="50" rows="10"
+                placeholder="type anything..."></textarea>
+            <div class="entry__user">
+                <label class="user__select_label" for="user_select">
+                    <input class="user__select" type="text" name="user_select" id="user_select" value=""
+                        placeholder="User" autocomplete="off" />
+                    <span class="user__select_style"></span>
+                </label>
+                <div class="user__list">
+                </div>
+            </div>
+            <div class="entry__button_container">
+                <button class="button__confirm_add button">Confirm</button>
+                <button class="button__confirm_edit button">Confirm</button>
+            </div>
+            <button class="entry__button_cancel button">Cancel</button>
+        </div>
+    </div>
+    <!-- !_____________Конец модального окна записи карточки______________________________ -->
+    <div class="module module__warning">
+        <span class="module__background"></span>
+        <!-- !________________Модальное окно вывода предупреждений и ошибок___________________ -->
+        <!-- *__________________________Место для кода Влада (при добавлении события, для того чтобы появлялся затемненный фон, необходимо обращаться к ".module__warning")_________________________________________ -->
+        <!-- !________________Конец модального окно вывода предупреждений и ошибок___________________ -->
+    </div>
+    <!--  __кнопки для проверки работы модального окна -->
+    <div style="top: 0; left: 0; position: absolute;">
+        <button class="button button__addTodo" style="height: 50px;
+               width: 100px;">для проверок</button>
+        <button class="button button__edit" style="height: 50px;
+               width: 100px;">Edit</button>
+    </div>
+    <!-- конец блока с временными кнопками -->
+    <!-- !______________________________________________________________ -->
+    <script src="./js/app.js" type="module"></script>
 </body>
+
 </html>
