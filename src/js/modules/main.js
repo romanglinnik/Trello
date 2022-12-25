@@ -9,6 +9,7 @@ import {
   openWindowEntryNew,
   openWindowEntryEdit,
   editNote,
+  checkStatusColor,
 } from "./func.js";
 //!__________________________________________________________
 //!__________________________________________________________
@@ -35,4 +36,12 @@ export const app = function () {
   document
     .querySelector(".button__confirm_edit")
     .addEventListener("click", editNote); //вызывает функцию сохранения информации после редактирования
+
+  document
+    .querySelector(".important")
+    .addEventListener("click", checkStatusColor); // вызывает функцию, которая меняет цвет маркера статуса
+
+  document
+    .querySelector(".urgently")
+    .addEventListener("click", checkStatusColor); // вызывает функцию, которая меняет цвет маркера статуса
 };

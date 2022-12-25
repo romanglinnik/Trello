@@ -57,22 +57,47 @@
         <div class="entry__container">
             <input class="entry__title" type="text" placeholder="Title">
             <!-- *__________________________________________________ -->
-            <div class="entry__check">
-                <div class="check__container">
-                    <label class="check__background" for="important">
-                        <input class="check__box important" type="checkbox" name="" id="important">
-                        <span class="check__icon"></span>
-                    </label>
-                    <p class="check__label">it is important?</p>
+            <div class="entry__status">
+                <div class="entry__check">
+                    <div class="check__container">
+                        <label class="check__background" for="important">
+                            <input class="check__box important" type="checkbox" name="" id="important">
+                            <span class="check__icon"></span>
+                        </label>
+                        <p class="check__label">it is important?</p>
+                    </div>
+                    <div class="check__container">
+                        <label class="check__background" for="urgently">
+                            <input class="check__box urgently" type="checkbox" name="" id="urgently">
+                            <span class="check__icon"></span>
+                        </label>
+                        <p class="check__label">it is urgent?</p>
+                    </div>
                 </div>
-                <div class="check__container">
-                    <label class="check__background" for="urgently">
-                        <input class="check__box urgently" type="checkbox" name="" id="urgently">
-                        <span class="check__icon"></span>
-                    </label>
-                    <p class="check__label">it is urgent?</p>
+                <div class="entry__status_color">
+                    <!-- *____________________________________________________ -->
+                <div class="status__menu">
+                    <div class="status__menu_item">
+                        <div class="radio__container">
+                            <input class="radio__input" type="radio" id="status__a" name="status">
+                            <span class="radio__background"></span>
+                        </div>
+                        <label for="status__a"><span>do now </span> things you need to get done immidiately
+                        </label>
+                    </div>
+                    <div class="status__menu_item">
+                        <div class="radio__container">
+                            <input class="radio__input" type="radio" id="status__b" name="status">
+                            <span class="radio__background"></span>
+                        </div>
+                        <label for="status__b"><span>plan </span> things you need to get done soon so put them in your diary
+                        </label>
+                    </div>
+                </div>
+                <!-- *__________________________________________________________ -->
                 </div>
             </div>
+            <!-- *____________________________________________________ -->
             <!-- *__________________________________________________ -->
             <textarea class="entry__content" name="entry" id="" cols="50" rows="10"
                 placeholder="type anything..."></textarea>

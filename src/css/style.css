@@ -324,12 +324,92 @@ body {
 }
 
 /* !_______________________________________________ */
+
+.entry__status {
+  grid-column: span 2;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.entry__status_color {
+  position: relative;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #aaa;
+  box-shadow: inset .1rem .1rem .3rem #c8d0e7,
+    inset -.1rem -.1rem .3rem #ffffff,
+    .3rem .3rem .8rem #777,
+    -.2rem -.2rem .5rem #aaa;
+}
+
+.radio__background.status__a,
+.entry__status_color.status__a {
+  background: #b9121b;
+}
+
+.radio__background.status__b,
+.entry__status_color.status__b {
+  background: #8bc34a;
+}
+
+.radio__background.status__c,
+.entry__status_color.status__c {
+  background: #f2b705;
+}
+.radio__background.status__d {
+  background: #aaa;
+}
+
+.status__menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 300px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #666;
+  padding: 10px;
+  border-radius: 10px;
+  /* transform: scale(0); */
+}
+
+.status__menu_item {
+  display: grid;
+  grid-template-columns: 35px 1fr;
+  gap: 10px;
+}
+
+.radio__container {
+  width: 35px;
+  height: 35px;
+  position: relative;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: inset .1rem .1rem .3rem #c8d0e7,
+    inset -.1rem -.1rem .3rem #ffffff,
+    .3rem .3rem .8rem #777,
+    -.2rem -.2rem .5rem #aaa;
+}
+
+.radio__input {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+
+
+
+
 .entry__check {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 0.5em;
-  grid-column: span 2;
   padding: 5px 40px;
   color: #444;
   font-weight: 600;

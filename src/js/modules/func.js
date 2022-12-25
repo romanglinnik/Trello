@@ -137,6 +137,7 @@ export const closeModuleEntry = function () {
   removeCheckImportant.checked = false;
   removeCheckUrgently.checked = false;
   moduleEntry.classList.remove("open"); //удаляем класс open
+  checkStatusColor();
 };
 //!___________________________________________________
 //!___________________________________________________
@@ -214,12 +215,39 @@ const checkStatus = function () {
   const checkUrgently = elementUrgently.checked;
   if (checkImportant && checkUrgently) {
     return "a";
-  } else if (checkImportant && !checkUrgently) {
-    return "b";
   } else if (!checkImportant && checkUrgently) {
+    return "b";
+  } else if (checkImportant && !checkUrgently) {
     return "c";
   } else if (!checkImportant && !checkUrgently) {
     return "d";
+  }
+};
+//!________________________________________________________________
+// !_______________________________________________________________
+// функция окрашивания маркера
+export const checkStatusColor = function () {
+  const elementImportant = document.querySelector(".important");
+  const checkImportant = elementImportant.checked;
+  const elementUrgently = document.querySelector(".urgently");
+  const checkUrgently = elementUrgently.checked;
+  const colorStatus = document.querySelector(".entry__status_color");
+  if (checkImportant && checkUrgently) {
+    colorStatus.classList.add("status__a");
+    colorStatus.classList.remove("status__b");
+    colorStatus.classList.remove("status__c");
+  } else if (!checkImportant && checkUrgently) {
+    colorStatus.classList.add("status__b");
+    colorStatus.classList.remove("status__a");
+    colorStatus.classList.remove("status__c");
+  } else if (checkImportant && !checkUrgently) {
+    colorStatus.classList.add("status__c");
+    colorStatus.classList.remove("status__a");
+    colorStatus.classList.remove("status__b");
+  } else if (!checkImportant && !checkUrgently) {
+    colorStatus.classList.remove("status__a");
+    colorStatus.classList.remove("status__b");
+    colorStatus.classList.remove("status__c");
   }
 };
 //!________________________________________________________________
@@ -244,6 +272,7 @@ export const openWindowEntryEdit = function () {
   const windowEntry = document.querySelector(".module__entry");
   windowEntry.classList.add("open");
   extractDataFromCard(); //- функция требует доработки
+  checkStatusColor(); //функция окрашивания маркера
 };
 // !________________________________________________________________
 // функция вывода модального окна для редактирования информации
@@ -267,12 +296,12 @@ const extractDataFromCard = function () {
           checkUrgently.checked = true;
           break;
         case "b":
-          checkImportant.checked = true;
-          checkUrgently.checked = false;
-          break;
-        case "c":
           checkImportant.checked = false;
           checkUrgently.checked = true;
+          break;
+        case "c":
+          checkImportant.checked = true;
+          checkUrgently.checked = false;
           break;
         case "d":
           checkImportant.checked = false;
@@ -305,6 +334,7 @@ export const editNote = function () {
         noteAll[i].title = addTitle.value;
         noteAll[i].content = addContent.value;
         noteAll[i].user = addUser.value;
+        noteAll[i].status = checkStatus();
       }
     }
     closeModuleEntry();
