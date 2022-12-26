@@ -252,6 +252,68 @@ export const checkStatusColor = function () {
 };
 //!________________________________________________________________
 // !_______________________________________________________________
+// функция открытия матрицы Эйзенхауэра
+export const openStatusMatrix = function (e) {
+  const statusMatrix = document.querySelector(".status__matrix");
+  statusMatrix.classList.add("open");
+  colorStatusMatrix();
+};
+//!________________________________________________________________
+// !_______________________________________________________________
+// функция закрытия матрицы Эйзенхауэра
+export const closeStatusMatrix = function () {
+  const statusMatrix = document.querySelector(".status__matrix");
+  statusMatrix.classList.remove("open");
+};
+//!________________________________________________________________
+// !_______________________________________________________________
+// функция окрашивания ячейки матрицы при изменении статуса "check-boxes"
+export const colorStatusMatrix = function () {
+  const elementImportant = document.querySelector(".important");
+  const checkImportant = elementImportant.checked;
+  const elementUrgently = document.querySelector(".urgently");
+  const checkUrgently = elementUrgently.checked;
+  const radioStatusA = document.querySelector(".radio__status-a");
+  const radioStatusB = document.querySelector(".radio__status-b");
+  const radioStatusC = document.querySelector(".radio__status-c");
+  const radioStatusD = document.querySelector(".radio__status-d");
+  if (checkImportant && checkUrgently) {
+    radioStatusA.checked = true;
+  } else if (!checkImportant && checkUrgently) {
+    radioStatusB.checked = true;
+  } else if (checkImportant && !checkUrgently) {
+    radioStatusC.checked = true;
+  } else if (!checkImportant && !checkUrgently) {
+    radioStatusD.checked = true;
+  }
+};
+
+//!________________________________________________________________
+// !_______________________________________________________________
+// функция которая возвращает статус"check-boxes" при выборе ячейки матрицы
+export const checkStatusBoxes = function () {
+  const checkImportant = document.querySelector(".important");
+  const checkUrgently = document.querySelector(".urgently");
+  const radioStatusA = document.querySelector(".radio__status-a");
+  const radioStatusB = document.querySelector(".radio__status-b");
+  const radioStatusC = document.querySelector(".radio__status-c");
+  const radioStatusD = document.querySelector(".radio__status-d");
+  if (radioStatusA.checked) {
+    checkImportant.checked = true;
+    checkUrgently.checked = true;
+  } else if (radioStatusB.checked) {
+    checkImportant.checked = false;
+    checkUrgently.checked = true;
+  } else if (radioStatusC.checked) {
+    checkImportant.checked = true;
+    checkUrgently.checked = false;
+  } else if (radioStatusD.checked) {
+    checkImportant.checked = false;
+    checkUrgently.checked = false;
+  }
+};
+//!________________________________________________________________
+// !_______________________________________________________________
 // вызов окна добавления новой задачи
 export const openWindowEntryNew = function () {
   const buttonConfirmAdd = document.querySelector(".button__confirm_add");

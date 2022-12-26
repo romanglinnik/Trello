@@ -74,27 +74,33 @@
                         <p class="check__label">it is urgent?</p>
                     </div>
                 </div>
-                <div class="entry__status_color">
+                <div class="entry__status_color" data-color="status">
                     <!-- *____________________________________________________ -->
-                <div class="status__menu">
-                    <div class="status__menu_item">
-                        <div class="radio__container">
-                            <input class="radio__input" type="radio" id="status__a" name="status">
-                            <span class="radio__background"></span>
+                    <div class="status__matrix">
+                        <button class="button matrix__end">End</button>
+                        <h3 class="matrix__name">The Eisenhower Matrix</h3>
+                        <p class="matrix__x matrix__x1">Urgent</p>
+                        <p class="matrix__x matrix__x2">Not urgent</p>
+                        <p class="matrix__y matrix__y1">Important</p>
+                        <div class="matrix__item item__status-a">
+                            <input class="matrix__radio radio__status-a" type="radio" id="status-a" name="status">
+                            <label class="matrix__label" for="status-a"><b>Do: </b>Tasks with deadlines or consequences.</label>
                         </div>
-                        <label for="status__a"><span>do now </span> things you need to get done immidiately
-                        </label>
-                    </div>
-                    <div class="status__menu_item">
-                        <div class="radio__container">
-                            <input class="radio__input" type="radio" id="status__b" name="status">
-                            <span class="radio__background"></span>
+                        <div class="matrix__item item__status-b">
+                            <input class="matrix__radio radio__status-b" type="radio" id="status-b" name="status">
+                            <label class="matrix__label" for="status-b"><b>Schedule: </b>Tasks with unclear deadlines that contribute to long-term success.</label>
                         </div>
-                        <label for="status__b"><span>plan </span> things you need to get done soon so put them in your diary
-                        </label>
+                        <p class="matrix__y matrix__y2">Not important</p>
+                        <div class="matrix__item item__status-c">
+                            <input class="matrix__radio radio__status-c" type="radio" id="status-c" name="status">
+                            <label class="matrix__label" for="status-c"><b>Delegate: </b>Tasks that must get done but don't require your specific skill set.</label>
+                        </div>
+                        <div class="matrix__item item__status-d">
+                            <input class="matrix__radio radio__status-d" type="radio" id="status-d" name="status">
+                            <label class="matrix__label" for="status-d"><b>Delete: </b>Distractions and unnecessary tasks.</label>
+                        </div>
                     </div>
-                </div>
-                <!-- *__________________________________________________________ -->
+                    <!-- *__________________________________________________________ -->
                 </div>
             </div>
             <!-- *____________________________________________________ -->
