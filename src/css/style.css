@@ -87,7 +87,7 @@ body {
 .column {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   width: calc(100% / 3);
   border-radius: 15px;
   text-shadow: 0 2px 2px #666;
@@ -404,3 +404,85 @@ body {
 }
 
 /* !________конец блока модального окна для ввода и редакции данных */
+
+/* !________Селекторы Карточки________________________________________ */
+
+.card{
+  width: 90%;
+  padding: 8px;
+  border-radius: 10px;
+  margin: 0 auto;
+  display: grid;
+  row-gap: 15px;
+  margin-bottom: 5px;
+  
+  /* cursor: grab; */
+}
+.card-todo{
+  background-color: rgb(213, 232, 212);
+  border: 2px solid rgb(153, 171, 149);
+}
+.card-progress{
+  background-color: rgb(242, 245, 246);
+  border: 2px solid rgb(215, 223, 226);
+}
+.card-done{
+  background-color: rgb(188, 224, 231);
+  border: 2px solid rgb(149, 188, 196);
+}
+.card__head, .card__data, .card__text{
+  display: flex;
+  justify-content: space-between;
+}
+.card__head{
+  height: 30px;
+}
+.head__title{
+  align-self: flex-end;
+}
+.head_color{
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  border: 2px solid white;
+  background-color: #668;
+}
+.buttons__edit{
+  margin-right: 5px;
+}
+.button-card{
+  font-size: 12px;
+  padding: 3px;
+  border-radius: 5px;
+  border: 1px solid black;
+  background-color: white;
+  cursor: pointer;
+}
+.button-card:hover{
+  background-color: rgb(205, 201, 201);
+}
+.text__btnCont{
+  display: flex;
+  gap: 8px;
+}
+.text__next-left{
+  padding: 9px 5px;
+  display: none;
+}
+.text__next-right{
+  padding: 9px 5px;
+}
+
+.text__description{
+  align-self: center;
+}
+.text__description, .data__user{
+  margin-left: 5px;
+}
+.data__time{
+  margin-right: 5px;
+}
+.hide{
+  display: none;
+
+}
