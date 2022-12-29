@@ -1,6 +1,9 @@
 // * в модуле "func" создаем основной функционал
 //!_____________________________________________________
 //!_____________________________________________________
+
+import {createNewCard} from "./render.js"
+
 let noteAll = [
   {
     id: 1,
@@ -169,12 +172,9 @@ const checkUserValue = function (value) {
 };
 //*____________________________________________
 export const addNewNote = function () {
-  const addTitle = document.querySelector(".entry__title");
-  let titleValue = addTitle.value;
-  const addContent = document.querySelector(".entry__content");
-  let contentValue = addContent.value;
-  const addUser = document.querySelector(".user__select");
-  let userValue = addUser.value;
+  let title = document.querySelector(".entry__title").value
+  let descript = document.querySelector(".entry__content").value
+  let user = document.querySelector(".user__select").value
   const allId = noteAll.map((item) => item.id);
   allId.sort((a, b) => a - b);
   let maxId = 0;
@@ -186,28 +186,37 @@ export const addNewNote = function () {
 
   const note = {
     id: maxId,
-    title: titleValue,
-    content: contentValue,
-    user: userValue,
+    title: title,
+    content: descript,
+    user: user,
     data: `${new Date().toLocaleDateString()}`,
     status: checkStatus(),
     position: "todo",
   };
 
   if (
-    checkNodeValue(titleValue) &&
-    checkNodeValue(contentValue) &&
-    checkNodeValue(userValue) &&
-    checkUserValue(userValue)
+    checkNodeValue(title) &&
+    checkNodeValue(descript) &&
+    checkNodeValue(user) &&
+    checkUserValue(user)
   ) {
     // createNewNote(note);// необходимо вызывать функцию отрисовки колонок
     noteAll.unshift(note);
+    createNewCard(note);
+    dragNdrop()
     // updateStorage(); //необходимо вызвать функцию сохранения данных
     closeModuleEntry();
   } else {
     alert("не заполнены поля");
   }
 };
+
+//!______________добавление_данных_из_массива_________
+
+for (let i = 0; i < noteAll.length; i++){
+  createNewCard(noteAll[i])
+}
+
 //!__________________________________________________________
 //!__________________________________________________________
 // проверка на "важность" и "срочность"
@@ -424,3 +433,98 @@ export const editNote = function () {
 };
 //!__________________________________________________________
 //!__________________________________________________________
+//!_______Смена_стилей_караточек_при_перетаскивании___
+
+let changeClassCards = function(item){
+  let inProgress =  document.querySelector('.panel__progress');
+  let done = document.querySelector('.panel__done');
+
+  let btnLeft = dragItem.querySelector('.text__next-left'); 
+  let btnright = dragItem.querySelector('.text__next-right'); 
+  let btnedit = dragItem.querySelector('.buttons__edit'); 
+ if(item.classList == inProgress.classList){
+  dragItem.classList.add("card-progress")
+  dragItem.classList.remove("card-todo")
+  dragItem.classList.remove("card-done")
+  btnLeft.style.display = "block"
+  btnright.style.display = "block"
+  btnedit.style.display = "none"
+ }else if(item.classList == done.classList){
+  dragItem.classList.add("card-done")
+  dragItem.classList.remove("card-todo")
+  dragItem.classList.remove("card-progress")
+  btnLeft.style.display = "block"
+  btnright.style.display = "none"
+  btnedit.style.display = "none"
+ }else{
+  dragItem.classList.add("card-todo")
+  dragItem.classList.remove("card-progress")
+  dragItem.classList.remove("card-done")
+  btnLeft.style.display = "none"
+  btnright.style.display = "block"
+  btnedit.style.display = "inline-block"
+ }
+
+}
+
+//!___________________Перетаскивание_карточек_(drag_&_drop)___
+
+
+let dragItem = null
+
+
+let dragNdrop = function(){
+  let listItem = document.querySelectorAll('.card');
+  let lists = document.querySelectorAll('.column__panel');
+
+ 
+  listItem.forEach(function(item){
+      let id = +item.getAttribute("data-key")
+      let productId = noteAll.find((item) => item.id === id);
+      if(productId.id == id){
+        const item1 = item
+      
+      
+    item1.addEventListener("dragstart", (e) =>{
+      dragItem = item1
+
+      setTimeout(()=>{
+        item1.classList.add("hide")
+        
+      }, 0)
+    })
+    item1.addEventListener("dragend", () =>{
+      
+      setTimeout(() =>{
+        item1.classList.remove("hide")
+        dragItem = null
+      }, 0)
+    })
+
+    for (let j = 0; j < lists.length; j++){
+      const list = lists[j]
+
+      list.addEventListener("dragover", e =>e.preventDefault())
+
+      list.addEventListener("dragenter", function(e){
+        e.preventDefault()
+        this.style.backgroundColor = `rgba(0,0,0,.3)`
+        this.style.borderRadius = `15px` 
+    
+      })
+      list.addEventListener("dragleave", function(e){
+        this.style.backgroundColor = `rgba(0,0,0,0)`
+      })
+      list.addEventListener("drop", function(e){
+        e.preventDefault()
+        this.style.backgroundColor = `rgba(0,0,0,0)`
+ 
+      changeClassCards(this)
+        this.append(dragItem)
+       
+      })
+    }
+    
+  }})
+}
+dragNdrop()
