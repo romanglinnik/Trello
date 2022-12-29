@@ -269,7 +269,7 @@ body {
   transform: rotate(45deg);
   top: 15%;
   right: 15px;
-  z-index: 3;
+  z-index: 12;
   cursor: pointer;
 }
 
@@ -316,7 +316,8 @@ body {
 }
 
 .user__list p:hover {
-  background: #86eb65;
+  /* background: #86eb65; */
+  background: #dcbcc5;
 }
 
 .user__list p.active {
@@ -332,10 +333,10 @@ body {
   align-items: center;
 }
 
-.entry__status_color {
+.status__color {
   position: relative;
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #7272cd;
   box-shadow: inset .1rem .1rem .3rem #c8d0e7,
@@ -343,18 +344,6 @@ body {
     .3rem .3rem .8rem #777,
     -.2rem -.2rem .5rem #aaa;
   cursor: pointer;
-}
-
-.entry__status_color.status__a {
-  background: #b9121b;
-}
-
-.entry__status_color.status__b {
-  background: #8bc34a;
-}
-
-.entry__status_color.status__c {
-  background: #f2b705;
 }
 
 .status__matrix {
@@ -389,11 +378,14 @@ body {
   grid-column: span 3;
 }
 
-.status__matrix .matrix__end {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #7272cd;
+.matrix__status_color {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(25%, 25%);
 }
 
 .matrix__x1 {
@@ -443,30 +435,29 @@ body {
   border-radius: 10px;
 }
 
-.matrix__end.status__a,
+div[data-status = "a"],
 .radio__status-a:checked~label {
   background: #b9121b;
   color: #fff;
 }
 
-.matrix__end.status__b,
+div[data-status="b"],
 .radio__status-b:checked~label {
   background: #8bc34a;
   color: #fff;
 }
 
-.matrix__end.status__c,
+div[data-status="c"],
 .radio__status-c:checked~label {
   background: #f2b705;
   color: #fff;
 }
 
-
+div[data-status="d"],
 .radio__status-d:checked~label {
   background: #7272cd;
   color: #fff;
 }
-
 
 .entry__check {
   display: flex;
@@ -529,7 +520,6 @@ body {
 .user__list_item.close {
   display: none;
 }
-
 
 .entry__button_container {
   display: flex;

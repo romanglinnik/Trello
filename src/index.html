@@ -56,7 +56,7 @@
         <!-- !____Модальное окно записи карточки________________ -->
         <div class="entry__container">
             <input class="entry__title" type="text" placeholder="Title">
-            <!-- *__________________________________________________ -->
+            <!-- *__________Определение статуса (важность / срочность)_________________________________ -->
             <div class="entry__status">
                 <div class="entry__check">
                     <div class="check__container">
@@ -74,10 +74,11 @@
                         <p class="check__label">it is urgent?</p>
                     </div>
                 </div>
-                <div class="entry__status_color" data-color="status">
-                    <!-- *____________________________________________________ -->
+                <!-- ?__________________цветовой индикатор___________________________ -->
+                <div class="status__color entry__status_color" data-color="status" data-status="">
+                    <!-- ?________________Матрица Эйзенхауэра____________________________________ -->
                     <div class="status__matrix">
-                        <button class="button matrix__end">End</button>
+                        <div class="status__color matrix__status_color" data-status="">End</div>
                         <h3 class="matrix__name">The Eisenhower Matrix</h3>
                         <p class="matrix__x matrix__x1">Urgent</p>
                         <p class="matrix__x matrix__x2">Not urgent</p>
@@ -100,11 +101,11 @@
                             <label class="matrix__label" for="status-d"><b>Delete: </b>Distractions and unnecessary tasks.</label>
                         </div>
                     </div>
-                    <!-- *__________________________________________________________ -->
+                    <!-- ?_______Конец матрицы Эйзенхауэра_________________________________________ -->
                 </div>
+                <!-- ?_________Конец цветового индикатора___________________________________________ -->
             </div>
-            <!-- *____________________________________________________ -->
-            <!-- *__________________________________________________ -->
+            <!-- ?__________________Конец определения статуса________________________________ -->
             <textarea class="entry__content" name="entry" id="" cols="50" rows="10"
                 placeholder="type anything..."></textarea>
             <div class="entry__user">

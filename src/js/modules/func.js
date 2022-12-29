@@ -33,7 +33,7 @@ let noteAll = [
 // !_________________________________________________________
 // !_________________________________________________________
 // отрисовка выпадающего списка
-const select = function (e) {
+export const select = function (e) {
   const name = e.target.getAttribute("data-name"); // Считываем значение выбранного элемента
   const nodes = e.target.parentNode.childNodes; // Получаем все остальные элементы
   for (let i = 0; i < nodes.length; i++) {
@@ -48,27 +48,21 @@ const select = function (e) {
   document.getElementById("user_select").value = name; // Устанавливаем в user-select выбранное значение
 };
 
-const toggleUserList = function () {
+export const toggleUserList = function () {
   const userList = document.querySelector(".user__list");
   userList.classList.toggle("open"); //добавляем класс open, если его нет и удаляем, если он есть
 };
 
-export const closeUserList = function () {
+export const openUserList = function () {
   const userList = document.querySelector(".user__list");
   userList.classList.add("open"); //добавляем класс open, если его нет и удаляем, если он есть
 };
 
-document
-  .querySelector(".user__select_style")
-  .addEventListener("click", function (e) {
-    e.stopPropagation();
-    toggleUserList();
-  }); //передаем декоративному элементу функцию, которая открывает и закрывает список Users
+export const closeUserList = function () {
+  const userList = document.querySelector(".user__list");
+  userList.classList.remove("open"); //добавляем класс open, если его нет и удаляем, если он есть
+};
 
-for (let elem of document.querySelectorAll(".user__list")) {
-  elem.addEventListener("click", select); // передаем элементам списка функцию выбора элемента
-  elem.addEventListener("dblclick", toggleUserList); // передаем элементам списка функцию, которая прячет список Users
-}
 //!_______________________________________________
 // !_______________________________________________
 // функция отрисовки списка users
@@ -123,6 +117,13 @@ export const search = function (e) {
 };
 //!___________________________________________________
 //!___________________________________________________
+// функция очистки поиска
+export const clearSearch = function () {
+  const userSelect = document.querySelector(".user__select");
+  userSelect.value = "";
+};
+//!___________________________________________________
+//!___________________________________________________
 // функция очистки и закрытия модального окна для ввода информации
 export const closeModuleEntry = function () {
   const removeTextTitle = document.querySelector(".entry__title");
@@ -138,6 +139,8 @@ export const closeModuleEntry = function () {
   removeCheckUrgently.checked = false;
   moduleEntry.classList.remove("open"); //удаляем класс open
   checkStatusColor();
+  closeUserList();
+  closeStatusMatrix();
 };
 //!___________________________________________________
 //!___________________________________________________
@@ -233,21 +236,13 @@ export const checkStatusColor = function () {
   const checkUrgently = elementUrgently.checked;
   const colorStatus = document.querySelector(".entry__status_color");
   if (checkImportant && checkUrgently) {
-    colorStatus.classList.add("status__a");
-    colorStatus.classList.remove("status__b");
-    colorStatus.classList.remove("status__c");
+    colorStatus.dataset.status = "a";
   } else if (!checkImportant && checkUrgently) {
-    colorStatus.classList.add("status__b");
-    colorStatus.classList.remove("status__a");
-    colorStatus.classList.remove("status__c");
+    colorStatus.dataset.status = "b";
   } else if (checkImportant && !checkUrgently) {
-    colorStatus.classList.add("status__c");
-    colorStatus.classList.remove("status__a");
-    colorStatus.classList.remove("status__b");
+    colorStatus.dataset.status = "c";
   } else if (!checkImportant && !checkUrgently) {
-    colorStatus.classList.remove("status__a");
-    colorStatus.classList.remove("status__b");
-    colorStatus.classList.remove("status__c");
+    colorStatus.dataset.status = "d";
   }
 };
 //!________________________________________________________________
@@ -277,17 +272,27 @@ export const colorStatusMatrix = function () {
   const radioStatusB = document.querySelector(".radio__status-b");
   const radioStatusC = document.querySelector(".radio__status-c");
   const radioStatusD = document.querySelector(".radio__status-d");
+  const colorStatus = document.querySelector(".entry__status_color");
+  const colorStatusMatrix = document.querySelector(".matrix__status_color");
+
   if (checkImportant && checkUrgently) {
     radioStatusA.checked = true;
+    colorStatus.dataset.status = "a";
+    colorStatusMatrix.dataset.status = "a";
   } else if (!checkImportant && checkUrgently) {
     radioStatusB.checked = true;
+    colorStatus.dataset.status = "b";
+    colorStatusMatrix.dataset.status = "b";
   } else if (checkImportant && !checkUrgently) {
     radioStatusC.checked = true;
+    colorStatus.dataset.status = "c";
+    colorStatusMatrix.dataset.status = "c";
   } else if (!checkImportant && !checkUrgently) {
     radioStatusD.checked = true;
+    colorStatus.dataset.status = "d";
+    colorStatusMatrix.dataset.status = "d";
   }
 };
-
 //!________________________________________________________________
 // !_______________________________________________________________
 // функция которая возвращает статус"check-boxes" при выборе ячейки матрицы
@@ -298,18 +303,28 @@ export const checkStatusBoxes = function () {
   const radioStatusB = document.querySelector(".radio__status-b");
   const radioStatusC = document.querySelector(".radio__status-c");
   const radioStatusD = document.querySelector(".radio__status-d");
+  const colorStatusMatrix = document.querySelector(".matrix__status_color");
+  const colorStatus = document.querySelector(".entry__status_color");
   if (radioStatusA.checked) {
     checkImportant.checked = true;
     checkUrgently.checked = true;
+    colorStatus.dataset.status = "a";
+    colorStatusMatrix.dataset.status = "a";
   } else if (radioStatusB.checked) {
     checkImportant.checked = false;
     checkUrgently.checked = true;
+    colorStatus.dataset.status = "b";
+    colorStatusMatrix.dataset.status = "b";
   } else if (radioStatusC.checked) {
     checkImportant.checked = true;
     checkUrgently.checked = false;
+    colorStatus.dataset.status = "c";
+    colorStatusMatrix.dataset.status = "c";
   } else if (radioStatusD.checked) {
     checkImportant.checked = false;
     checkUrgently.checked = false;
+    colorStatus.dataset.status = "d";
+    colorStatusMatrix.dataset.status = "d";
   }
 };
 //!________________________________________________________________
