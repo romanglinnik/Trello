@@ -18,9 +18,12 @@ import {
   clearSearch,
   toggleUserList,
   select,
+  start,
 } from "./func.js";
 //!__________________________________________________________
 //!__________________________________________________________
+
+start();
 
 document
   .querySelector(".user__select_style")

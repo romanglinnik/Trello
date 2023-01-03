@@ -1,6 +1,6 @@
 // * в модуле "render" добавляем элементы HTML
 
-import { openWindowEntryEdit, getIdCard } from "./func.js";
+import { getIdCard, } from "./func.js";
 
 export let createNewCard = function (obj) {
   let card = document.createElement("div");
@@ -14,10 +14,27 @@ export let createNewCard = function (obj) {
 
   let headCount = document.createElement("div");
   headCount.classList.add("head_count");
-
-  let colorblock = document.createElement("div");
-  colorblock.classList.add("head_color");
-
+  // !___________________________________________________
+  // !___________________________________________________
+  let colorBlock = document.createElement("div");
+  colorBlock.classList.add("head_color");
+  colorBlock.classList.add("status__color");
+  switch (obj.status) {
+    case "a":
+      colorBlock.dataset.status = "a";
+      break;
+    case "b":
+colorBlock.dataset.status = "b";
+      break;
+    case "c":
+colorBlock.dataset.status = "c";
+      break;
+    case "d":
+colorBlock.dataset.status = "d";
+      break;
+  }
+  // !________________________________________________
+  // !________________________________________________
   let title = document.createElement("p");
   title.classList.add("head__title");
   title.innerHTML = obj.title;
@@ -29,9 +46,7 @@ export let createNewCard = function (obj) {
   btnEdit.classList.add("buttons__edit");
   btnEdit.classList.add("button-card");
   btnEdit.innerHTML = "Edit";
-  // btnEdit.addEventListener("click", openWindowEntryEdit); //вызов окна редактирования карточки
   btnEdit.addEventListener("click", getIdCard); //вызов окна редактирования карточки
-  
 
   let btnDelete = document.createElement("button");
   btnDelete.classList.add("buttons__delete");
@@ -72,7 +87,7 @@ export let createNewCard = function (obj) {
   document.querySelector(".panel__todo").appendChild(card);
   card.append(head, text, data);
   head.append(headCount, headBtn);
-  headCount.append(colorblock, title);
+  headCount.append(colorBlock, title);
   headBtn.append(btnEdit, btnDelete);
   text.append(descript, btnNextCont);
   btnNextCont.append(btnNext1, btnNext2);

@@ -548,6 +548,7 @@ div[data-status="d"],
   display: grid;
   row-gap: 15px;
   margin-bottom: 5px;
+  color: #444;
   
   /* cursor: grab; */
 }
@@ -570,15 +571,18 @@ div[data-status="d"],
 .card__head{
   height: 30px;
 }
-.head__title{
-  align-self: flex-end;
+.head_count{
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-.head_color{
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
+
+.status__color.head_color{
+  width: 25px;
+  height: 25px;
+  /* border-radius: 10px;
   border: 2px solid white;
-  background-color: #668;
+  background-color: #668; */
 }
 .buttons__edit{
   margin-right: 5px;

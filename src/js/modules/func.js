@@ -2,7 +2,7 @@
 //!_____________________________________________________
 //!_____________________________________________________
 
-import {createNewCard} from "./render.js"
+import { createNewCard } from "./render.js";
 
 let noteAll = [
   {
@@ -146,17 +146,15 @@ export const closeModuleEntry = function () {
   closeStatusMatrix();
 };
 
-
 // !__________________________________________________
 // !__________________________________________________
 
-export const getIdCard = function (event){
+export const getIdCard = function (event) {
   const parent = event.target.closest(".card-todo");
   const cardId = parent.getAttribute("data-key");
-  console.log(cardId);
   extractDataFromCard(cardId); //- функция требует доработки
-  openWindowEntryEdit(cardId); 
-}
+  openWindowEntryEdit(cardId);
+};
 //!________________________________________________________________
 // !_______________________________________________________________
 // вызов окна редактирования задачи (вызывает функцию извлечения информации из карточки)
@@ -164,11 +162,19 @@ export const openWindowEntryEdit = function (cardId) {
   const buttonConfirmAdd = document.querySelector(".button__confirm_add");
   const buttonConfirmEdit = document.querySelector(".button__confirm_edit");
   buttonConfirmEdit.classList.add("open");
-  buttonConfirmEdit.setAttribute("data-key", cardId)
+  buttonConfirmEdit.setAttribute("data-key", cardId);
   buttonConfirmAdd.classList.remove("open");
   const windowEntry = document.querySelector(".module__entry");
   windowEntry.classList.add("open");
   checkStatusColor(); //функция окрашивания маркера
+};
+//!________________________________________________________________
+// !_______________________________________________________________
+// функция открытия матрицы Эйзенхауэра
+export const openStatusMatrix = function (e) {
+  const statusMatrix = document.querySelector(".status__matrix");
+  statusMatrix.classList.add("open");
+  colorStatusMatrix();
 };
 
 //!___________________________________________________
@@ -198,9 +204,9 @@ const checkUserValue = function (value) {
 };
 //*____________________________________________
 export const addNewNote = function () {
-  let title = document.querySelector(".entry__title").value
-  let descript = document.querySelector(".entry__content").value
-  let user = document.querySelector(".user__select").value
+  let title = document.querySelector(".entry__title").value;
+  let descript = document.querySelector(".entry__content").value;
+  let user = document.querySelector(".user__select").value;
   const allId = noteAll.map((item) => item.id);
   allId.sort((a, b) => a - b);
   let maxId = 0;
@@ -227,8 +233,8 @@ export const addNewNote = function () {
     checkUserValue(user)
   ) {
     noteAll.unshift(note);
-    createNewCard(note);//вызывается функция отрисовки колонок
-    dragAndDrop()
+    createNewCard(note); //вызывается функция отрисовки колонок
+    dragAndDrop();
     // updateStorage(); //необходимо вызвать функцию сохранения данных
     closeModuleEntry();
   } else {
@@ -237,9 +243,11 @@ export const addNewNote = function () {
 };
 //!______________добавление_данных_из_массива_________
 
-for (let i = 0; i < noteAll.length; i++){
-  createNewCard(noteAll[i])
-}
+export const start = function () {
+  for (let i = 0; i < noteAll.length; i++) {
+    createNewCard(noteAll[i]);
+  }
+};
 //!__________________________________________________________
 //!__________________________________________________________
 // проверка на "важность" и "срочность"
@@ -277,14 +285,7 @@ export const checkStatusColor = function () {
     colorStatus.dataset.status = "d";
   }
 };
-//!________________________________________________________________
-// !_______________________________________________________________
-// функция открытия матрицы Эйзенхауэра
-export const openStatusMatrix = function (e) {
-  const statusMatrix = document.querySelector(".status__matrix");
-  statusMatrix.classList.add("open");
-  colorStatusMatrix();
-};
+
 //!________________________________________________________________
 // !_______________________________________________________________
 // функция закрытия матрицы Эйзенхауэра
@@ -373,7 +374,6 @@ export const openWindowEntryNew = function () {
 
 // !________________________________________________________________
 // функция вывода модального окна для редактирования информации
-// (нужно дописать логику получения id карточки и отображения статуса checkboxes)
 const extractDataFromCard = function (cardId) {
   const addTitle = document.querySelector(".entry__title");
   const addContent = document.querySelector(".entry__content");
@@ -385,7 +385,6 @@ const extractDataFromCard = function (cardId) {
       addTitle.value = noteAll[i].title;
       addContent.value = noteAll[i].content;
       addUser.value = noteAll[i].user;
-      console.log(noteAll[i].status);
       switch (noteAll[i].status) {
         case "a":
           checkImportant.checked = true;
@@ -408,6 +407,34 @@ const extractDataFromCard = function (cardId) {
   }
   console.log("noteAll start", noteAll);
 };
+//!_____________________________________________________________________
+//!_____________________________________________________________________
+// функция изменения карточки после редактирования контента
+const editCard = function (obj) {
+  const card = document.querySelector(`[data-key = '${obj.id}']`);
+  const title = card.querySelector(".head__title");
+  title.innerHTML = obj.title;
+  const content = card.querySelector(".text__description");
+  content.innerHTML = obj.content;
+  const user = card.querySelector(".data__user");
+  user.innerHTML = obj.user;
+  const colorBlock = card.querySelector(".status__color");
+  switch (obj.status) {
+    case "a":
+      colorBlock.dataset.status = "a";
+      break;
+    case "b":
+      colorBlock.dataset.status = "b";
+      break;
+    case "c":
+      colorBlock.dataset.status = "c";
+      break;
+    case "d":
+      colorBlock.dataset.status = "d";
+      break;
+  }
+};
+
 //!_____________________________________________________________________
 //!_____________________________________________________________________
 //функция сохранения информации после редактирования
@@ -433,108 +460,107 @@ export const editNote = function (event) {
         noteAll[i].status = checkStatus();
       }
     }
+    const note = {
+      id: +cardId,
+      title: addTitle.value,
+      content: addContent.value,
+      user: addUser.value,
+      status: checkStatus(),
+    };
+    editCard(note);
     closeModuleEntry();
     // updateStorage(); //необходимо вызвать функцию сохранения данных
   } else {
     alert("не заполнены поля");
   }
+
   console.log("noteAll finish", noteAll);
 };
 //!__________________________________________________________
 //!__________________________________________________________
 //!_______Смена_стилей_карточек_при_перетаскивании___
 
-let changeClassCards = function(item){
-  let inProgress =  document.querySelector('.panel__progress');
-  let done = document.querySelector('.panel__done');
+let changeClassCards = function (item) {
+  let inProgress = document.querySelector(".panel__progress");
+  let done = document.querySelector(".panel__done");
 
-  let btnLeft = dragItem.querySelector('.text__next-left'); 
-  let btnRight = dragItem.querySelector('.text__next-right'); 
-  let btnEdit = dragItem.querySelector('.buttons__edit'); 
- if(item.classList == inProgress.classList){
-  dragItem.classList.add("card-progress")
-  dragItem.classList.remove("card-todo")
-  dragItem.classList.remove("card-done")
-  btnLeft.style.display = "block"
-  btnRight.style.display = "block"
-  btnEdit.style.display = "none"
- }else if(item.classList == done.classList){
-  dragItem.classList.add("card-done")
-  dragItem.classList.remove("card-todo")
-  dragItem.classList.remove("card-progress")
-  btnLeft.style.display = "block"
-  btnRight.style.display = "none"
-  btnEdit.style.display = "none"
- }else{
-  dragItem.classList.add("card-todo")
-  dragItem.classList.remove("card-progress")
-  dragItem.classList.remove("card-done")
-  btnLeft.style.display = "none"
-  btnRight.style.display = "block"
-  btnEdit.style.display = "inline-block"
- }
-
-}
+  let btnLeft = dragItem.querySelector(".text__next-left");
+  let btnRight = dragItem.querySelector(".text__next-right");
+  let btnEdit = dragItem.querySelector(".buttons__edit");
+  if (item.classList == inProgress.classList) {
+    dragItem.classList.add("card-progress");
+    dragItem.classList.remove("card-todo");
+    dragItem.classList.remove("card-done");
+    btnLeft.style.display = "block";
+    btnRight.style.display = "block";
+    btnEdit.style.display = "none";
+  } else if (item.classList == done.classList) {
+    dragItem.classList.add("card-done");
+    dragItem.classList.remove("card-todo");
+    dragItem.classList.remove("card-progress");
+    btnLeft.style.display = "block";
+    btnRight.style.display = "none";
+    btnEdit.style.display = "none";
+  } else {
+    dragItem.classList.add("card-todo");
+    dragItem.classList.remove("card-progress");
+    dragItem.classList.remove("card-done");
+    btnLeft.style.display = "none";
+    btnRight.style.display = "block";
+    btnEdit.style.display = "inline-block";
+  }
+};
 
 //!___________________Перетаскивание_карточек_(drag_&_drop)___
 
+let dragItem = null;
 
-let dragItem = null
+let dragAndDrop = function () {
+  let listItem = document.querySelectorAll(".card");
+  let lists = document.querySelectorAll(".column__panel");
 
+  listItem.forEach(function (item) {
+    let id = +item.getAttribute("data-key");
+    let productId = noteAll.find((item) => item.id === id);
+    if (productId.id == id) {
+      const item1 = item;
 
-let dragAndDrop = function(){
-  let listItem = document.querySelectorAll('.card');
-  let lists = document.querySelectorAll('.column__panel');
+      item1.addEventListener("dragstart", (e) => {
+        dragItem = item1;
 
- 
-  listItem.forEach(function(item){
-      let id = +item.getAttribute("data-key")
-      let productId = noteAll.find((item) => item.id === id);
-      if(productId.id == id){
-        const item1 = item
-      
-      
-    item1.addEventListener("dragstart", (e) =>{
-      dragItem = item1
+        setTimeout(() => {
+          item1.classList.add("hide");
+        }, 0);
+      });
+      item1.addEventListener("dragend", () => {
+        setTimeout(() => {
+          item1.classList.remove("hide");
+          dragItem = null;
+        }, 0);
+      });
 
-      setTimeout(()=>{
-        item1.classList.add("hide")
-        
-      }, 0)
-    })
-    item1.addEventListener("dragend", () =>{
-      
-      setTimeout(() =>{
-        item1.classList.remove("hide")
-        dragItem = null
-      }, 0)
-    })
+      for (let j = 0; j < lists.length; j++) {
+        const list = lists[j];
 
-    for (let j = 0; j < lists.length; j++){
-      const list = lists[j]
+        list.addEventListener("dragover", (e) => e.preventDefault());
 
-      list.addEventListener("dragover", e =>e.preventDefault())
+        list.addEventListener("dragenter", function (e) {
+          e.preventDefault();
+          this.style.backgroundColor = `rgba(0,0,0,.3)`;
+          this.style.borderRadius = `15px`;
+        });
+        list.addEventListener("dragleave", function (e) {
+          this.style.backgroundColor = `rgba(0,0,0,0)`;
+        });
+        list.addEventListener("drop", function (e) {
+          e.preventDefault();
+          this.style.backgroundColor = `rgba(0,0,0,0)`;
 
-      list.addEventListener("dragenter", function(e){
-        e.preventDefault()
-        this.style.backgroundColor = `rgba(0,0,0,.3)`
-        this.style.borderRadius = `15px` 
-    
-      })
-      list.addEventListener("dragleave", function(e){
-        this.style.backgroundColor = `rgba(0,0,0,0)`
-      })
-      list.addEventListener("drop", function(e){
-        e.preventDefault()
-        this.style.backgroundColor = `rgba(0,0,0,0)`
- 
-      changeClassCards(this)
-        this.append(dragItem)
-       
-      })
+          changeClassCards(this);
+          this.append(dragItem);
+        });
+      }
     }
-    
-  }})
-  console.log(noteAll)
-}
-dragAndDrop()
+  });
+};
+dragAndDrop();
