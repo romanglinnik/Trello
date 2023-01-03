@@ -8,7 +8,6 @@ import {
   closeModuleEntry,
   addNewNote,
   openWindowEntryNew,
-  // openWindowEntryEdit,
   editNote,
   checkStatusColor,
   closeStatusMatrix,
@@ -19,12 +18,13 @@ import {
   toggleUserList,
   select,
   start,
+  dragAndDrop,
 } from "./func.js";
 //!__________________________________________________________
 //!__________________________________________________________
 
 start();
-
+dragAndDrop();
 document
   .querySelector(".user__select_style")
   .addEventListener("click", function (e) {

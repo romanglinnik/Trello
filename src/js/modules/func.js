@@ -515,7 +515,7 @@ let changeClassCards = function (item) {
 
 let dragItem = null;
 
-let dragAndDrop = function () {
+export let dragAndDrop = function () {
   let listItem = document.querySelectorAll(".card");
   let lists = document.querySelectorAll(".column__panel");
 
@@ -563,4 +563,4 @@ let dragAndDrop = function () {
     }
   });
 };
-dragAndDrop();
+
