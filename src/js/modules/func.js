@@ -145,6 +145,32 @@ export const closeModuleEntry = function () {
   closeUserList();
   closeStatusMatrix();
 };
+
+
+// !__________________________________________________
+// !__________________________________________________
+
+export const getIdCard = function (event){
+  const parent = event.target.closest(".card-todo");
+  const cardId = parent.getAttribute("data-key");
+  console.log(cardId);
+  extractDataFromCard(cardId); //- функция требует доработки
+  openWindowEntryEdit(cardId); 
+}
+//!________________________________________________________________
+// !_______________________________________________________________
+// вызов окна редактирования задачи (вызывает функцию извлечения информации из карточки)
+export const openWindowEntryEdit = function (cardId) {
+  const buttonConfirmAdd = document.querySelector(".button__confirm_add");
+  const buttonConfirmEdit = document.querySelector(".button__confirm_edit");
+  buttonConfirmEdit.classList.add("open");
+  buttonConfirmEdit.setAttribute("data-key", cardId)
+  buttonConfirmAdd.classList.remove("open");
+  const windowEntry = document.querySelector(".module__entry");
+  windowEntry.classList.add("open");
+  checkStatusColor(); //функция окрашивания маркера
+};
+
 //!___________________________________________________
 //!___________________________________________________
 // проверка input на пустые значения
@@ -200,23 +226,20 @@ export const addNewNote = function () {
     checkNodeValue(user) &&
     checkUserValue(user)
   ) {
-    // createNewNote(note);// необходимо вызывать функцию отрисовки колонок
     noteAll.unshift(note);
-    createNewCard(note);
-    dragNdrop()
+    createNewCard(note);//вызывается функция отрисовки колонок
+    dragAndDrop()
     // updateStorage(); //необходимо вызвать функцию сохранения данных
     closeModuleEntry();
   } else {
     alert("не заполнены поля");
   }
 };
-
 //!______________добавление_данных_из_массива_________
 
 for (let i = 0; i < noteAll.length; i++){
   createNewCard(noteAll[i])
 }
-
 //!__________________________________________________________
 //!__________________________________________________________
 // проверка на "важность" и "срочность"
@@ -347,31 +370,18 @@ export const openWindowEntryNew = function () {
   const windowEntry = document.querySelector(".module__entry");
   windowEntry.classList.add("open");
 };
-//!________________________________________________________________
-// !_______________________________________________________________
-// вызов окна редактирования задачи (вызывает функцию извлечения информации из карточки)
-export const openWindowEntryEdit = function () {
-  const buttonConfirmAdd = document.querySelector(".button__confirm_add");
-  const buttonConfirmEdit = document.querySelector(".button__confirm_edit");
-  buttonConfirmEdit.classList.add("open");
-  buttonConfirmAdd.classList.remove("open");
-  const windowEntry = document.querySelector(".module__entry");
-  windowEntry.classList.add("open");
-  extractDataFromCard(); //- функция требует доработки
-  checkStatusColor(); //функция окрашивания маркера
-};
+
 // !________________________________________________________________
 // функция вывода модального окна для редактирования информации
 // (нужно дописать логику получения id карточки и отображения статуса checkboxes)
-const extractDataFromCard = function () {
-  const cardId = 2;
+const extractDataFromCard = function (cardId) {
   const addTitle = document.querySelector(".entry__title");
   const addContent = document.querySelector(".entry__content");
   const addUser = document.querySelector(".user__select");
   const checkImportant = document.querySelector(".important");
   const checkUrgently = document.querySelector(".urgently");
   for (let i = 0; i < noteAll.length; i++) {
-    if (noteAll[i].id === cardId) {
+    if (noteAll[i].id === +cardId) {
       addTitle.value = noteAll[i].title;
       addContent.value = noteAll[i].content;
       addUser.value = noteAll[i].user;
@@ -401,8 +411,8 @@ const extractDataFromCard = function () {
 //!_____________________________________________________________________
 //!_____________________________________________________________________
 //функция сохранения информации после редактирования
-export const editNote = function () {
-  const cardId = 2;
+export const editNote = function (event) {
+  const cardId = event.target.getAttribute("data-key");
   const addTitle = document.querySelector(".entry__title");
   const addContent = document.querySelector(".entry__content");
   const addUser = document.querySelector(".user__select");
@@ -416,7 +426,7 @@ export const editNote = function () {
     checkUserValue(userValue)
   ) {
     for (let i = 0; i < noteAll.length; i++) {
-      if (noteAll[i].id === cardId) {
+      if (noteAll[i].id === +cardId) {
         noteAll[i].title = addTitle.value;
         noteAll[i].content = addContent.value;
         noteAll[i].user = addUser.value;
@@ -424,7 +434,6 @@ export const editNote = function () {
       }
     }
     closeModuleEntry();
-    // createNewNote(note); // необходимо вызывать функцию отрисовки колонок
     // updateStorage(); //необходимо вызвать функцию сохранения данных
   } else {
     alert("не заполнены поля");
@@ -433,36 +442,36 @@ export const editNote = function () {
 };
 //!__________________________________________________________
 //!__________________________________________________________
-//!_______Смена_стилей_караточек_при_перетаскивании___
+//!_______Смена_стилей_карточек_при_перетаскивании___
 
 let changeClassCards = function(item){
   let inProgress =  document.querySelector('.panel__progress');
   let done = document.querySelector('.panel__done');
 
   let btnLeft = dragItem.querySelector('.text__next-left'); 
-  let btnright = dragItem.querySelector('.text__next-right'); 
-  let btnedit = dragItem.querySelector('.buttons__edit'); 
+  let btnRight = dragItem.querySelector('.text__next-right'); 
+  let btnEdit = dragItem.querySelector('.buttons__edit'); 
  if(item.classList == inProgress.classList){
   dragItem.classList.add("card-progress")
   dragItem.classList.remove("card-todo")
   dragItem.classList.remove("card-done")
   btnLeft.style.display = "block"
-  btnright.style.display = "block"
-  btnedit.style.display = "none"
+  btnRight.style.display = "block"
+  btnEdit.style.display = "none"
  }else if(item.classList == done.classList){
   dragItem.classList.add("card-done")
   dragItem.classList.remove("card-todo")
   dragItem.classList.remove("card-progress")
   btnLeft.style.display = "block"
-  btnright.style.display = "none"
-  btnedit.style.display = "none"
+  btnRight.style.display = "none"
+  btnEdit.style.display = "none"
  }else{
   dragItem.classList.add("card-todo")
   dragItem.classList.remove("card-progress")
   dragItem.classList.remove("card-done")
   btnLeft.style.display = "none"
-  btnright.style.display = "block"
-  btnedit.style.display = "inline-block"
+  btnRight.style.display = "block"
+  btnEdit.style.display = "inline-block"
  }
 
 }
@@ -473,7 +482,7 @@ let changeClassCards = function(item){
 let dragItem = null
 
 
-let dragNdrop = function(){
+let dragAndDrop = function(){
   let listItem = document.querySelectorAll('.card');
   let lists = document.querySelectorAll('.column__panel');
 
@@ -526,5 +535,6 @@ let dragNdrop = function(){
     }
     
   }})
+  console.log(noteAll)
 }
-dragNdrop()
+dragAndDrop()

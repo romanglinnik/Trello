@@ -8,7 +8,7 @@ import {
   closeModuleEntry,
   addNewNote,
   openWindowEntryNew,
-  openWindowEntryEdit,
+  // openWindowEntryEdit,
   editNote,
   checkStatusColor,
   closeStatusMatrix,
@@ -41,8 +41,8 @@ export const app = function () {
 
   document.querySelector(".user__select").addEventListener("dblclick", (e) => {
     const target = e.target.className;
-    console.log(e.target)
-    console.log(e)
+    console.log(e.target);
+    console.log(e);
     if (target !== "user__select") {
       return;
     }
@@ -51,13 +51,12 @@ export const app = function () {
     }
   }); // при фокусе "input" очищается поле ввода
 
-
-  document.querySelector(".module__background").addEventListener("click", () => {
-    closeUserList();
-    closeStatusMatrix();
-  })
-
-
+  document
+    .querySelector(".module__background")
+    .addEventListener("click", () => {
+      closeUserList();
+      closeStatusMatrix();
+    });
 
   document
     .querySelector(".button__confirm_add")
@@ -69,9 +68,6 @@ export const app = function () {
   document
     .querySelector(".button__todo-add")
     .addEventListener("click", openWindowEntryNew); // вызывает функцию вывода на экран модального окна для создания новой карточки
-  document
-    .querySelector(".button__edit")
-    .addEventListener("click", openWindowEntryEdit); //вызов окна редактирования карточки
 
   document
     .querySelector(".button__confirm_edit")
