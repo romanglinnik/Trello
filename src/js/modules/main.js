@@ -2,21 +2,64 @@
 //!________________________________________________________
 //!________________________________________________________
 import {
+  openUserList,
   closeUserList,
   search,
   closeModuleEntry,
   addNewNote,
   openWindowEntryNew,
-  openWindowEntryEdit,
   editNote,
+  checkStatusColor,
+  closeStatusMatrix,
+  openStatusMatrix,
+  colorStatusMatrix,
+  checkStatusBoxes,
+  clearSearch,
+  toggleUserList,
+  select,
+  start,
+  dragAndDrop,
 } from "./func.js";
 //!__________________________________________________________
 //!__________________________________________________________
+
+start();
+dragAndDrop();
+document
+  .querySelector(".user__select_style")
+  .addEventListener("click", function (e) {
+    toggleUserList();
+  }); //передаем декоративному элементу функцию, которая открывает и закрывает список Users
+
+for (let elem of document.querySelectorAll(".user__list")) {
+  elem.addEventListener("click", select); // передаем элементам списка функцию выбора элемента
+  elem.addEventListener("dblclick", toggleUserList); // передаем элементам списка функцию, которая прячет список Users
+}
+
 export const app = function () {
   document.querySelector(".user__select").addEventListener("input", search); // при фокусе "input" происходит вызов функции поиска
   document
     .querySelector(".user__select")
-    .addEventListener("input", closeUserList); // при фокусе "input" происходит вызов функции и выпадает список "users"
+    .addEventListener("input", openUserList); // при фокусе "input" происходит вызов функции и выпадает список "users"
+
+  document.querySelector(".user__select").addEventListener("dblclick", (e) => {
+    const target = e.target.className;
+    console.log(e.target);
+    console.log(e);
+    if (target !== "user__select") {
+      return;
+    }
+    {
+      clearSearch();
+    }
+  }); // при фокусе "input" очищается поле ввода
+
+  document
+    .querySelector(".module__background")
+    .addEventListener("click", () => {
+      closeUserList();
+      closeStatusMatrix();
+    });
 
   document
     .querySelector(".button__confirm_add")
@@ -28,11 +71,47 @@ export const app = function () {
   document
     .querySelector(".button__todo-add")
     .addEventListener("click", openWindowEntryNew); // вызывает функцию вывода на экран модального окна для создания новой карточки
-  document
-    .querySelector(".button__edit")
-    .addEventListener("click", openWindowEntryEdit); //вызов окна редактирования карточки
 
   document
     .querySelector(".button__confirm_edit")
     .addEventListener("click", editNote); //вызывает функцию сохранения информации после редактирования
+
+  document.querySelector(".important").addEventListener("click", () => {
+    checkStatusColor();
+    colorStatusMatrix();
+  }); // вызывает функцию, которая меняет цвет маркера статуса
+
+  document.querySelector(".urgently").addEventListener("click", () => {
+    checkStatusColor();
+    colorStatusMatrix();
+  }); // вызывает функцию, которая меняет цвет маркера статуса
+
+  document
+    .querySelector(".entry__status_color")
+    .addEventListener("click", (event) => {
+      const target = event.target.dataset.color;
+      if (target !== "status") {
+        return; //проверяет на каком элементе произошло событие. Если событие происходит на вложенных элементах,у которых отсутствует заданный дата-атрибут, возвращает indefinitely;
+      }
+      {
+        openStatusMatrix(); // вызывает функцию открытия матрицы
+      }
+    });
+
+  document
+    .querySelector(".matrix__status_color")
+    .addEventListener("click", closeStatusMatrix); //вызывает функцию закрытия матрицы
+
+  document
+    .querySelector(".radio__status-a")
+    .addEventListener("click", checkStatusBoxes); //вызывает функцию изменения статуса "check-boxes"
+  document
+    .querySelector(".radio__status-b")
+    .addEventListener("click", checkStatusBoxes); //вызывает функцию изменения статуса "check-boxes"
+  document
+    .querySelector(".radio__status-c")
+    .addEventListener("click", checkStatusBoxes); //вызывает функцию изменения статуса "check-boxes"
+  document
+    .querySelector(".radio__status-d")
+    .addEventListener("click", checkStatusBoxes); //вызывает функцию изменения статуса "check-boxes"
 };

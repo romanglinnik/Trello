@@ -2,7 +2,7 @@
 //!_____________________________________________________
 //!_____________________________________________________
 
-import {createNewCard} from "./render.js"
+import { createNewCard } from "./render.js";
 
 let noteAll = [
   {
@@ -36,7 +36,7 @@ let noteAll = [
 // !_________________________________________________________
 // !_________________________________________________________
 // отрисовка выпадающего списка
-const select = function (e) {
+export const select = function (e) {
   const name = e.target.getAttribute("data-name"); // Считываем значение выбранного элемента
   const nodes = e.target.parentNode.childNodes; // Получаем все остальные элементы
   for (let i = 0; i < nodes.length; i++) {
@@ -51,27 +51,21 @@ const select = function (e) {
   document.getElementById("user_select").value = name; // Устанавливаем в user-select выбранное значение
 };
 
-const toggleUserList = function () {
+export const toggleUserList = function () {
   const userList = document.querySelector(".user__list");
   userList.classList.toggle("open"); //добавляем класс open, если его нет и удаляем, если он есть
 };
 
-export const closeUserList = function () {
+export const openUserList = function () {
   const userList = document.querySelector(".user__list");
   userList.classList.add("open"); //добавляем класс open, если его нет и удаляем, если он есть
 };
 
-document
-  .querySelector(".user__select_style")
-  .addEventListener("click", function (e) {
-    e.stopPropagation();
-    toggleUserList();
-  }); //передаем декоративному элементу функцию, которая открывает и закрывает список Users
+export const closeUserList = function () {
+  const userList = document.querySelector(".user__list");
+  userList.classList.remove("open"); //добавляем класс open, если его нет и удаляем, если он есть
+};
 
-for (let elem of document.querySelectorAll(".user__list")) {
-  elem.addEventListener("click", select); // передаем элементам списка функцию выбора элемента
-  elem.addEventListener("dblclick", toggleUserList); // передаем элементам списка функцию, которая прячет список Users
-}
 //!_______________________________________________
 // !_______________________________________________
 // функция отрисовки списка users
@@ -126,6 +120,13 @@ export const search = function (e) {
 };
 //!___________________________________________________
 //!___________________________________________________
+// функция очистки поиска
+export const clearSearch = function () {
+  const userSelect = document.querySelector(".user__select");
+  userSelect.value = "";
+};
+//!___________________________________________________
+//!___________________________________________________
 // функция очистки и закрытия модального окна для ввода информации
 export const closeModuleEntry = function () {
   const removeTextTitle = document.querySelector(".entry__title");
@@ -140,7 +141,42 @@ export const closeModuleEntry = function () {
   removeCheckImportant.checked = false;
   removeCheckUrgently.checked = false;
   moduleEntry.classList.remove("open"); //удаляем класс open
+  checkStatusColor();
+  closeUserList();
+  closeStatusMatrix();
 };
+
+// !__________________________________________________
+// !__________________________________________________
+
+export const getIdCard = function (event) {
+  const parent = event.target.closest(".card-todo");
+  const cardId = parent.getAttribute("data-key");
+  extractDataFromCard(cardId); //- функция требует доработки
+  openWindowEntryEdit(cardId);
+};
+//!________________________________________________________________
+// !_______________________________________________________________
+// вызов окна редактирования задачи (вызывает функцию извлечения информации из карточки)
+export const openWindowEntryEdit = function (cardId) {
+  const buttonConfirmAdd = document.querySelector(".button__confirm_add");
+  const buttonConfirmEdit = document.querySelector(".button__confirm_edit");
+  buttonConfirmEdit.classList.add("open");
+  buttonConfirmEdit.setAttribute("data-key", cardId);
+  buttonConfirmAdd.classList.remove("open");
+  const windowEntry = document.querySelector(".module__entry");
+  windowEntry.classList.add("open");
+  checkStatusColor(); //функция окрашивания маркера
+};
+//!________________________________________________________________
+// !_______________________________________________________________
+// функция открытия матрицы Эйзенхауэра
+export const openStatusMatrix = function (e) {
+  const statusMatrix = document.querySelector(".status__matrix");
+  statusMatrix.classList.add("open");
+  colorStatusMatrix();
+};
+
 //!___________________________________________________
 //!___________________________________________________
 // проверка input на пустые значения
@@ -168,9 +204,9 @@ const checkUserValue = function (value) {
 };
 //*____________________________________________
 export const addNewNote = function () {
-  let title = document.querySelector(".entry__title").value
-  let descript = document.querySelector(".entry__content").value
-  let user = document.querySelector(".user__select").value
+  let title = document.querySelector(".entry__title").value;
+  let descript = document.querySelector(".entry__content").value;
+  let user = document.querySelector(".user__select").value;
   const allId = noteAll.map((item) => item.id);
   allId.sort((a, b) => a - b);
   let maxId = 0;
@@ -196,23 +232,22 @@ export const addNewNote = function () {
     checkNodeValue(user) &&
     checkUserValue(user)
   ) {
-    // createNewNote(note);// необходимо вызывать функцию отрисовки колонок
     noteAll.unshift(note);
-    createNewCard(note);
-    dragNdrop()
+    createNewCard(note); //вызывается функция отрисовки колонок
+    dragAndDrop();
     // updateStorage(); //необходимо вызвать функцию сохранения данных
     closeModuleEntry();
   } else {
     alert("не заполнены поля");
   }
 };
-
 //!______________добавление_данных_из_массива_________
 
-for (let i = 0; i < noteAll.length; i++){
-  createNewCard(noteAll[i])
-}
-
+export const start = function () {
+  for (let i = 0; i < noteAll.length; i++) {
+    createNewCard(noteAll[i]);
+  }
+};
 //!__________________________________________________________
 //!__________________________________________________________
 // проверка на "важность" и "срочность"
@@ -223,12 +258,106 @@ const checkStatus = function () {
   const checkUrgently = elementUrgently.checked;
   if (checkImportant && checkUrgently) {
     return "a";
-  } else if (checkImportant && !checkUrgently) {
-    return "b";
   } else if (!checkImportant && checkUrgently) {
+    return "b";
+  } else if (checkImportant && !checkUrgently) {
     return "c";
   } else if (!checkImportant && !checkUrgently) {
     return "d";
+  }
+};
+//!________________________________________________________________
+// !_______________________________________________________________
+// функция окрашивания маркера
+export const checkStatusColor = function () {
+  const elementImportant = document.querySelector(".important");
+  const checkImportant = elementImportant.checked;
+  const elementUrgently = document.querySelector(".urgently");
+  const checkUrgently = elementUrgently.checked;
+  const colorStatus = document.querySelector(".entry__status_color");
+  if (checkImportant && checkUrgently) {
+    colorStatus.dataset.status = "a";
+  } else if (!checkImportant && checkUrgently) {
+    colorStatus.dataset.status = "b";
+  } else if (checkImportant && !checkUrgently) {
+    colorStatus.dataset.status = "c";
+  } else if (!checkImportant && !checkUrgently) {
+    colorStatus.dataset.status = "d";
+  }
+};
+
+//!________________________________________________________________
+// !_______________________________________________________________
+// функция закрытия матрицы Эйзенхауэра
+export const closeStatusMatrix = function () {
+  const statusMatrix = document.querySelector(".status__matrix");
+  statusMatrix.classList.remove("open");
+};
+//!________________________________________________________________
+// !_______________________________________________________________
+// функция окрашивания ячейки матрицы при изменении статуса "check-boxes"
+export const colorStatusMatrix = function () {
+  const elementImportant = document.querySelector(".important");
+  const checkImportant = elementImportant.checked;
+  const elementUrgently = document.querySelector(".urgently");
+  const checkUrgently = elementUrgently.checked;
+  const radioStatusA = document.querySelector(".radio__status-a");
+  const radioStatusB = document.querySelector(".radio__status-b");
+  const radioStatusC = document.querySelector(".radio__status-c");
+  const radioStatusD = document.querySelector(".radio__status-d");
+  const colorStatus = document.querySelector(".entry__status_color");
+  const colorStatusMatrix = document.querySelector(".matrix__status_color");
+
+  if (checkImportant && checkUrgently) {
+    radioStatusA.checked = true;
+    colorStatus.dataset.status = "a";
+    colorStatusMatrix.dataset.status = "a";
+  } else if (!checkImportant && checkUrgently) {
+    radioStatusB.checked = true;
+    colorStatus.dataset.status = "b";
+    colorStatusMatrix.dataset.status = "b";
+  } else if (checkImportant && !checkUrgently) {
+    radioStatusC.checked = true;
+    colorStatus.dataset.status = "c";
+    colorStatusMatrix.dataset.status = "c";
+  } else if (!checkImportant && !checkUrgently) {
+    radioStatusD.checked = true;
+    colorStatus.dataset.status = "d";
+    colorStatusMatrix.dataset.status = "d";
+  }
+};
+//!________________________________________________________________
+// !_______________________________________________________________
+// функция которая возвращает статус"check-boxes" при выборе ячейки матрицы
+export const checkStatusBoxes = function () {
+  const checkImportant = document.querySelector(".important");
+  const checkUrgently = document.querySelector(".urgently");
+  const radioStatusA = document.querySelector(".radio__status-a");
+  const radioStatusB = document.querySelector(".radio__status-b");
+  const radioStatusC = document.querySelector(".radio__status-c");
+  const radioStatusD = document.querySelector(".radio__status-d");
+  const colorStatusMatrix = document.querySelector(".matrix__status_color");
+  const colorStatus = document.querySelector(".entry__status_color");
+  if (radioStatusA.checked) {
+    checkImportant.checked = true;
+    checkUrgently.checked = true;
+    colorStatus.dataset.status = "a";
+    colorStatusMatrix.dataset.status = "a";
+  } else if (radioStatusB.checked) {
+    checkImportant.checked = false;
+    checkUrgently.checked = true;
+    colorStatus.dataset.status = "b";
+    colorStatusMatrix.dataset.status = "b";
+  } else if (radioStatusC.checked) {
+    checkImportant.checked = true;
+    checkUrgently.checked = false;
+    colorStatus.dataset.status = "c";
+    colorStatusMatrix.dataset.status = "c";
+  } else if (radioStatusD.checked) {
+    checkImportant.checked = false;
+    checkUrgently.checked = false;
+    colorStatus.dataset.status = "d";
+    colorStatusMatrix.dataset.status = "d";
   }
 };
 //!________________________________________________________________
@@ -242,46 +371,32 @@ export const openWindowEntryNew = function () {
   const windowEntry = document.querySelector(".module__entry");
   windowEntry.classList.add("open");
 };
-//!________________________________________________________________
-// !_______________________________________________________________
-// вызов окна редактирования задачи (вызывает функцию извлечения информации из карточки)
-export const openWindowEntryEdit = function () {
-  const buttonConfirmAdd = document.querySelector(".button__confirm_add");
-  const buttonConfirmEdit = document.querySelector(".button__confirm_edit");
-  buttonConfirmEdit.classList.add("open");
-  buttonConfirmAdd.classList.remove("open");
-  const windowEntry = document.querySelector(".module__entry");
-  windowEntry.classList.add("open");
-  extractDataFromCard(); //- функция требует доработки
-};
+
 // !________________________________________________________________
 // функция вывода модального окна для редактирования информации
-// (нужно дописать логику получения id карточки и отображения статуса checkboxes)
-const extractDataFromCard = function () {
-  const cardId = 2;
+const extractDataFromCard = function (cardId) {
   const addTitle = document.querySelector(".entry__title");
   const addContent = document.querySelector(".entry__content");
   const addUser = document.querySelector(".user__select");
   const checkImportant = document.querySelector(".important");
   const checkUrgently = document.querySelector(".urgently");
   for (let i = 0; i < noteAll.length; i++) {
-    if (noteAll[i].id === cardId) {
+    if (noteAll[i].id === +cardId) {
       addTitle.value = noteAll[i].title;
       addContent.value = noteAll[i].content;
       addUser.value = noteAll[i].user;
-      console.log(noteAll[i].status);
       switch (noteAll[i].status) {
         case "a":
           checkImportant.checked = true;
           checkUrgently.checked = true;
           break;
         case "b":
-          checkImportant.checked = true;
-          checkUrgently.checked = false;
-          break;
-        case "c":
           checkImportant.checked = false;
           checkUrgently.checked = true;
+          break;
+        case "c":
+          checkImportant.checked = true;
+          checkUrgently.checked = false;
           break;
         case "d":
           checkImportant.checked = false;
@@ -294,9 +409,37 @@ const extractDataFromCard = function () {
 };
 //!_____________________________________________________________________
 //!_____________________________________________________________________
+// функция изменения карточки после редактирования контента
+const editCard = function (obj) {
+  const card = document.querySelector(`[data-key = '${obj.id}']`);
+  const title = card.querySelector(".head__title");
+  title.innerHTML = obj.title;
+  const content = card.querySelector(".text__description");
+  content.innerHTML = obj.content;
+  const user = card.querySelector(".data__user");
+  user.innerHTML = obj.user;
+  const colorBlock = card.querySelector(".status__color");
+  switch (obj.status) {
+    case "a":
+      colorBlock.dataset.status = "a";
+      break;
+    case "b":
+      colorBlock.dataset.status = "b";
+      break;
+    case "c":
+      colorBlock.dataset.status = "c";
+      break;
+    case "d":
+      colorBlock.dataset.status = "d";
+      break;
+  }
+};
+
+//!_____________________________________________________________________
+//!_____________________________________________________________________
 //функция сохранения информации после редактирования
-export const editNote = function () {
-  const cardId = 2;
+export const editNote = function (event) {
+  const cardId = event.target.getAttribute("data-key");
   const addTitle = document.querySelector(".entry__title");
   const addContent = document.querySelector(".entry__content");
   const addUser = document.querySelector(".user__select");
@@ -310,114 +453,114 @@ export const editNote = function () {
     checkUserValue(userValue)
   ) {
     for (let i = 0; i < noteAll.length; i++) {
-      if (noteAll[i].id === cardId) {
+      if (noteAll[i].id === +cardId) {
         noteAll[i].title = addTitle.value;
         noteAll[i].content = addContent.value;
         noteAll[i].user = addUser.value;
+        noteAll[i].status = checkStatus();
       }
     }
+    const note = {
+      id: +cardId,
+      title: addTitle.value,
+      content: addContent.value,
+      user: addUser.value,
+      status: checkStatus(),
+    };
+    editCard(note);
     closeModuleEntry();
-    // createNewNote(note); // необходимо вызывать функцию отрисовки колонок
     // updateStorage(); //необходимо вызвать функцию сохранения данных
   } else {
     alert("не заполнены поля");
   }
+
   console.log("noteAll finish", noteAll);
 };
 //!__________________________________________________________
 //!__________________________________________________________
-//!_______Смена_стилей_караточек_при_перетаскивании___
+//!_______Смена_стилей_карточек_при_перетаскивании___
 
-let changeClassCards = function(item){
-  let inProgress =  document.querySelector('.panel__progress');
-  let done = document.querySelector('.panel__done');
+let changeClassCards = function (item) {
+  let inProgress = document.querySelector(".panel__progress");
+  let done = document.querySelector(".panel__done");
 
-  let btnLeft = dragItem.querySelector('.text__next-left'); 
-  let btnright = dragItem.querySelector('.text__next-right'); 
-  let btnedit = dragItem.querySelector('.buttons__edit'); 
- if(item.classList == inProgress.classList){
-  dragItem.classList.add("card-progress")
-  dragItem.classList.remove("card-todo")
-  dragItem.classList.remove("card-done")
-  btnLeft.style.display = "block"
-  btnright.style.display = "block"
-  btnedit.style.display = "none"
- }else if(item.classList == done.classList){
-  dragItem.classList.add("card-done")
-  dragItem.classList.remove("card-todo")
-  dragItem.classList.remove("card-progress")
-  btnLeft.style.display = "block"
-  btnright.style.display = "none"
-  btnedit.style.display = "none"
- }else{
-  dragItem.classList.add("card-todo")
-  dragItem.classList.remove("card-progress")
-  dragItem.classList.remove("card-done")
-  btnLeft.style.display = "none"
-  btnright.style.display = "block"
-  btnedit.style.display = "inline-block"
- }
-
-}
+  let btnLeft = dragItem.querySelector(".text__next-left");
+  let btnRight = dragItem.querySelector(".text__next-right");
+  let btnEdit = dragItem.querySelector(".buttons__edit");
+  if (item.classList == inProgress.classList) {
+    dragItem.classList.add("card-progress");
+    dragItem.classList.remove("card-todo");
+    dragItem.classList.remove("card-done");
+    btnLeft.style.display = "block";
+    btnRight.style.display = "block";
+    btnEdit.style.display = "none";
+  } else if (item.classList == done.classList) {
+    dragItem.classList.add("card-done");
+    dragItem.classList.remove("card-todo");
+    dragItem.classList.remove("card-progress");
+    btnLeft.style.display = "block";
+    btnRight.style.display = "none";
+    btnEdit.style.display = "none";
+  } else {
+    dragItem.classList.add("card-todo");
+    dragItem.classList.remove("card-progress");
+    dragItem.classList.remove("card-done");
+    btnLeft.style.display = "none";
+    btnRight.style.display = "block";
+    btnEdit.style.display = "inline-block";
+  }
+};
 
 //!___________________Перетаскивание_карточек_(drag_&_drop)___
 
+let dragItem = null;
 
-let dragItem = null
+export let dragAndDrop = function () {
+  let listItem = document.querySelectorAll(".card");
+  let lists = document.querySelectorAll(".column__panel");
 
+  listItem.forEach(function (item) {
+    let id = +item.getAttribute("data-key");
+    let productId = noteAll.find((item) => item.id === id);
+    if (productId.id == id) {
+      const item1 = item;
 
-let dragNdrop = function(){
-  let listItem = document.querySelectorAll('.card');
-  let lists = document.querySelectorAll('.column__panel');
+      item1.addEventListener("dragstart", (e) => {
+        dragItem = item1;
 
- 
-  listItem.forEach(function(item){
-      let id = +item.getAttribute("data-key")
-      let productId = noteAll.find((item) => item.id === id);
-      if(productId.id == id){
-        const item1 = item
-      
-      
-    item1.addEventListener("dragstart", (e) =>{
-      dragItem = item1
+        setTimeout(() => {
+          item1.classList.add("hide");
+        }, 0);
+      });
+      item1.addEventListener("dragend", () => {
+        setTimeout(() => {
+          item1.classList.remove("hide");
+          dragItem = null;
+        }, 0);
+      });
 
-      setTimeout(()=>{
-        item1.classList.add("hide")
-        
-      }, 0)
-    })
-    item1.addEventListener("dragend", () =>{
-      
-      setTimeout(() =>{
-        item1.classList.remove("hide")
-        dragItem = null
-      }, 0)
-    })
+      for (let j = 0; j < lists.length; j++) {
+        const list = lists[j];
 
-    for (let j = 0; j < lists.length; j++){
-      const list = lists[j]
+        list.addEventListener("dragover", (e) => e.preventDefault());
 
-      list.addEventListener("dragover", e =>e.preventDefault())
+        list.addEventListener("dragenter", function (e) {
+          e.preventDefault();
+          this.style.backgroundColor = `rgba(0,0,0,.3)`;
+          this.style.borderRadius = `15px`;
+        });
+        list.addEventListener("dragleave", function (e) {
+          this.style.backgroundColor = `rgba(0,0,0,0)`;
+        });
+        list.addEventListener("drop", function (e) {
+          e.preventDefault();
+          this.style.backgroundColor = `rgba(0,0,0,0)`;
 
-      list.addEventListener("dragenter", function(e){
-        e.preventDefault()
-        this.style.backgroundColor = `rgba(0,0,0,.3)`
-        this.style.borderRadius = `15px` 
-    
-      })
-      list.addEventListener("dragleave", function(e){
-        this.style.backgroundColor = `rgba(0,0,0,0)`
-      })
-      list.addEventListener("drop", function(e){
-        e.preventDefault()
-        this.style.backgroundColor = `rgba(0,0,0,0)`
- 
-      changeClassCards(this)
-        this.append(dragItem)
-       
-      })
+          changeClassCards(this);
+          this.append(dragItem);
+        });
+      }
     }
-    
-  }})
-}
-dragNdrop()
+  });
+};
+
