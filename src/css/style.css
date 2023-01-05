@@ -61,12 +61,16 @@ body {
   width: 150px;
   height: 70%;
   border-radius: 15px;
+  font-size: 24px;
   box-shadow: 0 2px 2px #444;
   text-shadow: 0 2px 2px #666;
   border-radius: 15px;
   border: 2px solid #b5aab6;
   padding: 15px;
   background: linear-gradient(#b5aab6, #dcbcc5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .section__board {
