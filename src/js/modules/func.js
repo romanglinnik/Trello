@@ -172,7 +172,7 @@ export const openWindowEntryEdit = function (cardId) {
 // !_______________________________________________________________
 // функция открытия матрицы Эйзенхауэра
 export const openStatusMatrix = function (e) {
-  const statusMatrix = document.querySelector(".entry__matrix");
+  const statusMatrix = document.querySelector(".matrix-window");
   statusMatrix.classList.add("open");
   console.log(statusMatrix)
   colorStatusMatrix();
@@ -291,7 +291,7 @@ export const checkStatusColor = function () {
 // !_______________________________________________________________
 // функция закрытия матрицы Эйзенхауэра
 export const closeStatusMatrix = function () {
-  const statusMatrix = document.querySelector(".entry__matrix");
+  const statusMatrix = document.querySelector(".matrix-window");
   statusMatrix.classList.remove("open");
 };
 //!________________________________________________________________
@@ -307,7 +307,7 @@ export const colorStatusMatrix = function () {
   const radioStatusC = document.querySelector(".radio__status-c");
   const radioStatusD = document.querySelector(".radio__status-d");
   const colorStatus = document.querySelector(".entry__mark");
-  const colorStatusMatrix = document.querySelector(".matrix__mark_window");
+  const colorStatusMatrix = document.querySelector(".matrix-window__mark");
 
   if (checkImportant && checkUrgently) {
     radioStatusA.checked = true;
@@ -337,7 +337,7 @@ export const checkStatusBoxes = function () {
   const radioStatusB = document.querySelector(".radio__status-b");
   const radioStatusC = document.querySelector(".radio__status-c");
   const radioStatusD = document.querySelector(".radio__status-d");
-  const colorStatusMatrix = document.querySelector(".matrix__mark_window");
+  const colorStatusMatrix = document.querySelector(".matrix-window__mark");
   const colorStatus = document.querySelector(".entry__mark");
   if (radioStatusA.checked) {
     checkImportant.checked = true;

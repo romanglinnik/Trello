@@ -99,7 +99,7 @@ export const app = function () {
     });
 
   document
-    .querySelector(".matrix__mark_window")
+    .querySelector(".matrix-window__mark")
     .addEventListener("click", closeStatusMatrix); //вызывает функцию закрытия матрицы
 
   document

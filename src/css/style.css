@@ -333,7 +333,33 @@ body {
   align-items: center;
 }
 
+/* !______________________________________________ */
+/* матрица */
+
+.matrix {
+  position: absolute;
+  left: -20%;
+  top: -20%;
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  background: #666;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 14px;
+  transform: scale(0);
+  z-index: 5;
+}
+
+.matrix.open {
+  transform: scale(1);
+  transition: 50ms;
+}
+
 .mark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   width: 40px;
   height: 40px;
@@ -346,30 +372,76 @@ body {
   cursor: pointer;
 }
 
-.matrix {
-  position: absolute;
-  left: -20%;
-  top: -20%;
-  height: 330px;
-  width: 330px;
-  display: grid;
-  grid-template-columns: 30px 1fr 1fr;
-  grid-template-rows: 25px 20px 1fr 1fr;
-  justify-items: center;
-  gap: 5px;
-  background: #666;
-  padding: 5px;
+.matrix__item {
+  display: block;
+  position: relative;
   border-radius: 10px;
-  font-size: 14px;
-  transform: scale(0);
- /* transform: translateY(-50%); */
- z-index: 5;
+  background: #fff;
+  box-shadow: inset .1rem .1rem .3rem #c8d0e7,
+    inset -.1rem -.1rem .3rem #ffffff,
+    .3rem .3rem .8rem #777,
+    -.2rem -.2rem .5rem #aaa;
 }
 
-.matrix.open {
-  transform: scale(1);
-  transition: 50ms;
+
+
+/* !______________________________________________ */
+/* матрица в модальном окне */
+.matrix-window {
+  height: 330px;
+  width: 330px;
+  grid-template-columns: 30px 1fr 1fr;
+  grid-template-rows: 25px 20px 1fr 1fr;
 }
+
+.matrix-window__mark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(25%, 25%);
+}
+
+.matrix-window__item {
+  width: 130px;
+  height: 130px;
+}
+
+/* !______________________________________________ */
+/* матрица в карточке */
+
+.matrix-card {
+  grid-template-columns: 30px 1fr 1fr;
+  grid-template-rows: 15px 1fr 1fr;
+  height: 120px;
+  width: 315px;
+}
+
+.matrix-card__item {
+  width: 120px;
+  height: 40px;
+}
+
+.matrix-card__mark {
+  width: 30px;
+  height: 30px;
+  grid-row: span 3;
+}
+
+.matrix__name_card {
+  /* grid-row-start: 1; */
+  grid-column: span 2;
+
+
+}
+
+/* !______________________________________________ */
+/* !______________________________________________ */
+
+
+
+
+
+
 
 .matrix .matrix__label {
   color: #444;
@@ -379,15 +451,8 @@ body {
   grid-column: span 3;
 }
 
-.matrix__mark {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform: translate(25%, 25%);
-}
+
+
 
 .matrix__x1 {
   grid-column-start: 2;
@@ -403,18 +468,7 @@ body {
   font-size: 11px;
 }
 
-.matrix__item {
-  display: block;
-  width: 130px;
-  height: 130px;
-  position: relative;
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: inset .1rem .1rem .3rem #c8d0e7,
-    inset -.1rem -.1rem .3rem #ffffff,
-    .3rem .3rem .8rem #777,
-    -.2rem -.2rem .5rem #aaa;
-}
+
 
 .matrix__radio {
   opacity: 0;
@@ -436,7 +490,7 @@ body {
   border-radius: 10px;
 }
 
-div[data-status = "a"],
+div[data-status="a"],
 .radio__status-a:checked~label {
   background: #b9121b;
   color: #fff;
@@ -541,8 +595,8 @@ div[data-status="d"],
 
 /* !________Селекторы Карточки________________________________________ */
 
-.card{
-  width: 90%;
+.card {
+  width: 95%;
   padding: 8px;
   border-radius: 10px;
   margin: 0 auto;
@@ -550,45 +604,55 @@ div[data-status="d"],
   row-gap: 15px;
   margin-bottom: 5px;
   color: #444;
-  
+
   /* cursor: grab; */
 }
-.card-todo{
+
+.card-todo {
   background-color: rgb(213, 232, 212);
   border: 2px solid rgb(153, 171, 149);
 }
-.card-progress{
+
+.card-progress {
   background-color: rgb(242, 245, 246);
   border: 2px solid rgb(215, 223, 226);
 }
-.card-done{
+
+.card-done {
   background-color: rgb(188, 224, 231);
   border: 2px solid rgb(149, 188, 196);
 }
-.card__head, .card__data, .card__text{
+
+.card__head,
+.card__data,
+.card__text {
   display: flex;
   justify-content: space-between;
 }
-.card__head{
+
+.card__head {
   height: 30px;
 }
-.head_count{
+
+.head_count {
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-.mark.head_color{
+.mark.head_color {
   width: 25px;
   height: 25px;
   /* border-radius: 10px;
   border: 2px solid white;
   background-color: #668; */
 }
-.buttons__edit{
+
+.buttons__edit {
   margin-right: 5px;
 }
-.button-card{
+
+.button-card {
   font-size: 12px;
   padding: 3px;
   border-radius: 5px;
@@ -596,31 +660,39 @@ div[data-status="d"],
   background-color: white;
   cursor: pointer;
 }
-.button-card:hover{
+
+.button-card:hover {
   background-color: rgb(205, 201, 201);
 }
-.text__btnCont{
+
+.text__btnCont {
   display: flex;
   gap: 8px;
 }
-.text__next-left{
+
+.text__next-left {
   padding: 9px 5px;
   display: none;
 }
-.text__next-right{
+
+.text__next-right {
   padding: 9px 5px;
 }
 
-.text__description{
+.text__description {
   align-self: center;
 }
-.text__description, .data__user{
+
+.text__description,
+.data__user {
   margin-left: 5px;
 }
-.data__time{
+
+.data__time {
   margin-right: 5px;
 }
-.hide{
+
+.hide {
   display: none;
 
 }
