@@ -172,8 +172,9 @@ export const openWindowEntryEdit = function (cardId) {
 // !_______________________________________________________________
 // функция открытия матрицы Эйзенхауэра
 export const openStatusMatrix = function (e) {
-  const statusMatrix = document.querySelector(".status__matrix");
+  const statusMatrix = document.querySelector(".matrix-window");
   statusMatrix.classList.add("open");
+  console.log(statusMatrix)
   colorStatusMatrix();
 };
 
@@ -275,7 +276,7 @@ export const checkStatusColor = function () {
   const checkImportant = elementImportant.checked;
   const elementUrgently = document.querySelector(".urgently");
   const checkUrgently = elementUrgently.checked;
-  const colorStatus = document.querySelector(".entry__status_color");
+  const colorStatus = document.querySelector(".entry__mark");
   if (checkImportant && checkUrgently) {
     colorStatus.dataset.status = "a";
   } else if (!checkImportant && checkUrgently) {
@@ -291,7 +292,7 @@ export const checkStatusColor = function () {
 // !_______________________________________________________________
 // функция закрытия матрицы Эйзенхауэра
 export const closeStatusMatrix = function () {
-  const statusMatrix = document.querySelector(".status__matrix");
+  const statusMatrix = document.querySelector(".matrix-window");
   statusMatrix.classList.remove("open");
 };
 //!________________________________________________________________
@@ -306,8 +307,8 @@ export const colorStatusMatrix = function () {
   const radioStatusB = document.querySelector(".radio__status-b");
   const radioStatusC = document.querySelector(".radio__status-c");
   const radioStatusD = document.querySelector(".radio__status-d");
-  const colorStatus = document.querySelector(".entry__status_color");
-  const colorStatusMatrix = document.querySelector(".matrix__status_color");
+  const colorStatus = document.querySelector(".entry__mark");
+  const colorStatusMatrix = document.querySelector(".matrix-window__mark");
 
   if (checkImportant && checkUrgently) {
     radioStatusA.checked = true;
@@ -337,8 +338,8 @@ export const checkStatusBoxes = function () {
   const radioStatusB = document.querySelector(".radio__status-b");
   const radioStatusC = document.querySelector(".radio__status-c");
   const radioStatusD = document.querySelector(".radio__status-d");
-  const colorStatusMatrix = document.querySelector(".matrix__status_color");
-  const colorStatus = document.querySelector(".entry__status_color");
+  const colorStatusMatrix = document.querySelector(".matrix-window__mark");
+  const colorStatus = document.querySelector(".entry__mark");
   if (radioStatusA.checked) {
     checkImportant.checked = true;
     checkUrgently.checked = true;
@@ -419,7 +420,7 @@ const editCard = function (obj) {
   content.innerHTML = obj.content;
   const user = card.querySelector(".data__user");
   user.innerHTML = obj.user;
-  const colorBlock = card.querySelector(".status__color");
+  const colorBlock = card.querySelector(".mark");
   switch (obj.status) {
     case "a":
       colorBlock.dataset.status = "a";

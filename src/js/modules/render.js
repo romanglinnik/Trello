@@ -1,6 +1,6 @@
 // * в модуле "render" добавляем элементы HTML
 
-import { getIdCard, } from "./func.js";
+import { getIdCard, closeStatusMatrix, openStatusMatrix } from "./func.js";
 
 export let createNewCard = function (obj) {
   let card = document.createElement("div");
@@ -18,21 +18,134 @@ export let createNewCard = function (obj) {
   // !___________________________________________________
   let colorBlock = document.createElement("div");
   colorBlock.classList.add("head_color");
-  colorBlock.classList.add("status__color");
+  colorBlock.classList.add("mark");
+
+  const statusMatrix = document.createElement("div");
+  statusMatrix.classList.add("matrix");
+  statusMatrix.classList.add("matrix-card");
+
+  const matrixStatusColor = document.createElement("div");
+  matrixStatusColor.classList.add("matrix-card__mark");
+  matrixStatusColor.classList.add("mark");
+  matrixStatusColor.innerText = "End";
+  matrixStatusColor.addEventListener("click", () => {
+    statusMatrix.classList.remove("open");
+  }); //закрывает матрицу
+
   switch (obj.status) {
     case "a":
       colorBlock.dataset.status = "a";
+      matrixStatusColor.dataset.status = "a";
       break;
     case "b":
-colorBlock.dataset.status = "b";
+      colorBlock.dataset.status = "b";
+      matrixStatusColor.dataset.status = "b";
       break;
     case "c":
-colorBlock.dataset.status = "c";
+      colorBlock.dataset.status = "c";
+      matrixStatusColor.dataset.status = "c";
       break;
     case "d":
-colorBlock.dataset.status = "d";
+      colorBlock.dataset.status = "d";
+      matrixStatusColor.dataset.status = "d";
       break;
   }
+  colorBlock.addEventListener("click", (event) => {
+    const target = event.target.getAttribute("class");
+    if (target !== "head_color mark") {
+      return;
+    }
+    {
+      statusMatrix.classList.add("open");
+    }
+  });
+
+  const matrixName = document.createElement("h3");
+  matrixName.classList.add("matrix__name_card");
+  matrixName.innerText = "The Eisenhower Matrix";
+
+  const itemStatusA = document.createElement("div");
+  itemStatusA.classList.add("matrix-card__item");
+  itemStatusA.classList.add("matrix__item");
+  itemStatusA.classList.add("item__status-a");
+
+  const radioStatusA = document.createElement("input");
+  radioStatusA.setAttribute("type", "radio");
+  radioStatusA.setAttribute("id", "card-status-a");
+  radioStatusA.setAttribute("name", `status ${obj.id}`);
+  radioStatusA.classList.add("matrix__status-a");
+  radioStatusA.classList.add("matrix__radio");
+
+  const labelStatusA = document.createElement("label");
+  labelStatusA.setAttribute("for", "card-status-a");
+  labelStatusA.classList.add("matrix__label");
+  labelStatusA.innerHTML = "<b>Important & <br>Urgent</b>";
+
+  const itemStatusB = document.createElement("div");
+  itemStatusB.classList.add("matrix-card__item");
+  itemStatusB.classList.add("matrix__item");
+  itemStatusB.classList.add("item__status-b");
+
+  const radioStatusB = document.createElement("input");
+  radioStatusB.setAttribute("type", "radio");
+  radioStatusB.setAttribute("id", "card-status-b");
+  radioStatusB.setAttribute("name", `status ${obj.id}`);
+  radioStatusB.classList.add("matrix__status-b");
+  radioStatusB.classList.add("matrix__radio");
+
+  const labelStatusB = document.createElement("label");
+  labelStatusB.setAttribute("for", "card-status-b");
+  labelStatusB.classList.add("matrix__label");
+  labelStatusB.innerHTML = "<b>Important & <br>Not urgent</b>";
+
+  const itemStatusC = document.createElement("div");
+  itemStatusC.classList.add("matrix-card__item");
+  itemStatusC.classList.add("matrix__item");
+  itemStatusC.classList.add("item__status-c");
+
+  const radioStatusC = document.createElement("input");
+  radioStatusC.setAttribute("type", "radio");
+  radioStatusC.setAttribute("id", "card-status-c");
+  radioStatusC.setAttribute("name", `status ${obj.id}`);
+  radioStatusC.classList.add("matrix__status-c");
+  radioStatusC.classList.add("matrix__radio");
+
+  const labelStatusC = document.createElement("label");
+  labelStatusC.setAttribute("for", "card-status-c");
+  labelStatusC.classList.add("matrix__label");
+  labelStatusC.innerHTML = "<b>Not important & <br>Urgent</b>";
+
+  const itemStatusD = document.createElement("div");
+  itemStatusD.classList.add("matrix-card__item");
+  itemStatusD.classList.add("matrix__item");
+  itemStatusD.classList.add("item__status-d");
+
+  const radioStatusD = document.createElement("input");
+  radioStatusD.setAttribute("type", "radio");
+  radioStatusD.setAttribute("id", "card-status-d");
+  radioStatusD.setAttribute("name", `status ${obj.id}`);
+  radioStatusD.classList.add("matrix__status-d");
+  radioStatusD.classList.add("matrix__radio");
+
+  const labelStatusD = document.createElement("label");
+  labelStatusD.setAttribute("for", "card-status-d");
+  labelStatusD.classList.add("matrix__label");
+  labelStatusD.innerHTML = "<b>Not important & <br>Not urgent</b>"
+
+  colorBlock.append(statusMatrix);
+  statusMatrix.append(
+    matrixStatusColor,
+    matrixName,
+    itemStatusA,
+    itemStatusB,
+    itemStatusC,
+    itemStatusD
+  );
+  itemStatusA.append(radioStatusA, labelStatusA);
+  itemStatusB.append(radioStatusB, labelStatusB);
+  itemStatusC.append(radioStatusC, labelStatusC);
+  itemStatusD.append(radioStatusD, labelStatusD);
+
   // !________________________________________________
   // !________________________________________________
   let title = document.createElement("p");
@@ -93,3 +206,5 @@ colorBlock.dataset.status = "d";
   btnNextCont.append(btnNext1, btnNext2);
   data.append(user, time);
 };
+
+// !___________________________________________________
