@@ -673,14 +673,34 @@ div[data-status="d"],
 .text__next-left {
   padding: 9px 5px;
   display: none;
+  height: 40px;
 }
 
 .text__next-right {
   padding: 9px 5px;
+  height: 40px;
 }
 
 .text__description {
   align-self: center;
+  height: 50px;
+  width: 223px;
+  word-wrap: break-word;
+  overflow-y: auto;
+}
+.text__description::-webkit-scrollbar {
+  width: 10px;
+}
+
+.text__description::-webkit-scrollbar-track {
+  background: #b5aab6;
+  border-radius: 20px;
+}
+
+.text__description::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: 3px solid #ffffff
 }
 
 .text__description,
