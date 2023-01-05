@@ -235,6 +235,7 @@ export const addNewNote = function () {
     noteAll.unshift(note);
     createNewCard(note); //вызывается функция отрисовки колонок
     dragAndDrop();
+    showCountTodo()
     // updateStorage(); //необходимо вызвать функцию сохранения данных
     closeModuleEntry();
   } else {
@@ -558,9 +559,74 @@ export let dragAndDrop = function () {
 
           changeClassCards(this);
           this.append(dragItem);
+          showCountTodo()
         });
       }
     }
   });
 };
 
+
+//!___________________Счетчик_карточек_в_блоке___
+
+export let showCountTodo = function(){
+  let countTodo = document.querySelector(".todo__counter") 
+  let todoLength = document.querySelectorAll(".card-todo").length
+
+  let countInProgress = document.querySelector(".progress__counter") 
+  let inProgressLength = document.querySelectorAll(".card-progress").length
+
+  let countDone = document.querySelector(".done__counter ") 
+  let DoneLength = document.querySelectorAll(".card-done").length
+
+
+  countTodo.textContent = todoLength
+  countInProgress.textContent = inProgressLength
+  countDone.textContent = DoneLength 
+
+}
+
+export let checkPosishionCards = function(){
+  let listItem = document.querySelectorAll(".card");
+  let lists = document.querySelectorAll(".column__panel");
+  let panelTodo = document.querySelector(".panel__todo");
+  let panelDone = document.querySelector(".panel__done")
+  let panelInProgress = document.querySelector(".panel__progress")
+
+
+  listItem.forEach(function (item) {
+    let btnLeft = item.querySelector(".text__next-left");
+    let btnRight = item.querySelector(".text__next-right");
+    let btnEdit = item.querySelector(".buttons__edit");
+
+    let id = +item.getAttribute("data-key");
+    let productId = noteAll.find((item) => item.id === id);
+    if(productId.position == "todo"){
+      panelTodo.appendChild(item)
+      item.classList.remove("card-progress");
+      item.classList.remove("card-done");
+      item.classList.add("card-todo");
+      btnLeft.style.display = "none";
+      btnRight.style.display = "block";
+      btnEdit.style.display = "inline-block";
+    }
+    if(productId.position == "in progress"){
+      panelInProgress.appendChild(item)
+      item.classList.add("card-progress");
+      item.classList.remove("card-todo");
+      item.classList.remove("card-done");
+      btnLeft.style.display = "block";
+      btnRight.style.display = "block";
+      btnEdit.style.display = "none";
+    }
+    if(productId.position == "done"){
+      panelDone.appendChild(item)
+      item.classList.add("card-done");
+      item.classList.remove("card-todo");
+      item.classList.remove("card-progress");
+      btnLeft.style.display = "block";
+      btnRight.style.display = "none";
+      btnEdit.style.display = "none";
+    }
+})
+}

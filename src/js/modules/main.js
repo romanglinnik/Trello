@@ -19,12 +19,16 @@ import {
   select,
   start,
   dragAndDrop,
+  showCountTodo,
+  checkPosishionCards,
 } from "./func.js";
 //!__________________________________________________________
 //!__________________________________________________________
 
 start();
 dragAndDrop();
+checkPosishionCards();
+showCountTodo();
 document
   .querySelector(".user__select_style")
   .addEventListener("click", function (e) {
