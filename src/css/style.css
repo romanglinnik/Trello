@@ -596,7 +596,8 @@ div[data-status="d"],
 /* !________Селекторы Карточки________________________________________ */
 
 .card {
-  width: 95%;
+  width: 300px;
+  height: 164px;
   padding: 8px;
   border-radius: 10px;
   margin: 0 auto;
