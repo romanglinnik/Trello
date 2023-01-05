@@ -87,7 +87,7 @@ export const app = function () {
   }); // вызывает функцию, которая меняет цвет маркера статуса
 
   document
-    .querySelector(".entry__status_color")
+    .querySelector(`[data-color = 'status']`)
     .addEventListener("click", (event) => {
       const target = event.target.dataset.color;
       if (target !== "status") {
@@ -99,7 +99,7 @@ export const app = function () {
     });
 
   document
-    .querySelector(".matrix__status_color")
+    .querySelector(".matrix__mark_window")
     .addEventListener("click", closeStatusMatrix); //вызывает функцию закрытия матрицы
 
   document

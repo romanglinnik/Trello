@@ -333,7 +333,7 @@ body {
   align-items: center;
 }
 
-.status__color {
+.mark {
   position: relative;
   width: 40px;
   height: 40px;
@@ -346,15 +346,15 @@ body {
   cursor: pointer;
 }
 
-.status__matrix {
+.matrix {
   position: absolute;
   left: -20%;
   top: -20%;
-  height: 350px;
-  width: 350px;
+  height: 330px;
+  width: 330px;
   display: grid;
-  grid-template-columns: 40px 1fr 1fr;
-  grid-template-rows: 20px 20px 1fr 1fr;
+  grid-template-columns: 30px 1fr 1fr;
+  grid-template-rows: 25px 20px 1fr 1fr;
   justify-items: center;
   gap: 5px;
   background: #666;
@@ -363,14 +363,15 @@ body {
   font-size: 14px;
   transform: scale(0);
  /* transform: translateY(-50%); */
+ z-index: 5;
 }
 
-.status__matrix.open {
+.matrix.open {
   transform: scale(1);
   transition: 50ms;
 }
 
-.status__matrix .matrix__label {
+.matrix .matrix__label {
   color: #444;
 }
 
@@ -378,7 +379,7 @@ body {
   grid-column: span 3;
 }
 
-.matrix__status_color {
+.matrix__mark {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -399,7 +400,7 @@ body {
 
 .matrix__x,
 .matrix__y {
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .matrix__item {
@@ -577,7 +578,7 @@ div[data-status="d"],
   gap: 5px;
 }
 
-.status__color.head_color{
+.mark.head_color{
   width: 25px;
   height: 25px;
   /* border-radius: 10px;
