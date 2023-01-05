@@ -27,8 +27,8 @@ import {
 
 start();
 dragAndDrop();
-showCountTodo();
 checkPosishionCards();
+showCountTodo();
 document
   .querySelector(".user__select_style")
   .addEventListener("click", function (e) {
