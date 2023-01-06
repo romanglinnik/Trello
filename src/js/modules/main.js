@@ -22,36 +22,49 @@ import {
   dragAndDrop,
   showCountTodo,
   checkPosishionCards,
+  notErrorUser,
+  notErrorTitle,
+  notErrorContent,
 } from "./func.js";
 //!__________________________________________________________
 //!__________________________________________________________
 
-
-
 export const app = function () {
-loadPage();
-start();
-dragAndDrop();
-checkPosishionCards();
-showCountTodo();
-document
-  .querySelector(".user__select_style")
-  .addEventListener("click", function (e) {
-    toggleUserList();
-  }); //передаем декоративному элементу функцию, которая открывает и закрывает список Users
+  loadPage();
+  start();
+  dragAndDrop();
+  checkPosishionCards();
+  showCountTodo();
+  document
+    .querySelector(".user__select_style")
+    .addEventListener("click", function (e) {
+      toggleUserList();
+    }); //передаем декоративному элементу функцию, которая открывает и закрывает список Users
 
-for (let elem of document.querySelectorAll(".user__list")) {
-  elem.addEventListener("click", select); // передаем элементам списка функцию выбора элемента
-  elem.addEventListener("dblclick", toggleUserList); // передаем элементам списка функцию, которая прячет список Users
-}
+  for (let elem of document.querySelectorAll(".user__list")) {
+    elem.addEventListener("click", select); // передаем элементам списка функцию выбора элемента
+    elem.addEventListener("dblclick", toggleUserList); // передаем элементам списка функцию, которая прячет список Users
+  }
 
-  window.onload = function(){
-    window.setInterval(function(){
-    let now = new Date();
-    let clock = document.querySelector(".header__clock");
-    clock.innerHTML = now.toLocaleTimeString().slice(0, -3);
-    },1000);
+  window.onload = function () {
+    window.setInterval(function () {
+      let now = new Date();
+      let clock = document.querySelector(".header__clock");
+      clock.innerHTML = now.toLocaleTimeString().slice(0, -3);
+    }, 1000);
   };
+  // !___________________________________________________________
+  document
+    .querySelector(".entry__title")
+    .addEventListener("click", notErrorTitle);
+  document
+    .querySelector(".entry__content")
+    .addEventListener("click", notErrorContent);
+  document
+    .querySelector(".user__select")
+    .addEventListener("click", notErrorUser);
+
+  // !___________________________________________________________
 
   document.querySelector(".user__select").addEventListener("input", search); // при фокусе "input" происходит вызов функции поиска
   document
