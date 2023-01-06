@@ -67,17 +67,24 @@ export const select = function (e) {
 
 export const toggleUserList = function () {
   const userList = document.querySelector(".user__list");
+  const userListIndicator = document.querySelector(".user__select_style");
+
   userList.classList.toggle("open"); //добавляем класс open, если его нет и удаляем, если он есть
+  userListIndicator.classList.toggle("open"); //добавляем класс open, если его нет и удаляем, если он есть
 };
 
 export const openUserList = function () {
   const userList = document.querySelector(".user__list");
+  const userListIndicator = document.querySelector(".user__select_style");
   userList.classList.add("open"); //добавляем класс open, если его нет и удаляем, если он есть
+  userListIndicator.classList.add("open");
 };
 
 export const closeUserList = function () {
   const userList = document.querySelector(".user__list");
+  const userListIndicator = document.querySelector(".user__select_style");
   userList.classList.remove("open"); //добавляем класс open, если его нет и удаляем, если он есть
+  userListIndicator.classList.remove("open");
 };
 
 //!_______________________________________________
@@ -158,6 +165,9 @@ export const closeModuleEntry = function () {
   checkStatusColor();
   closeUserList();
   closeStatusMatrix();
+  notErrorTitle();
+  notErrorContent();
+  notErrorUser();
 };
 
 // !__________________________________________________
@@ -188,7 +198,7 @@ export const openWindowEntryEdit = function (cardId) {
 export const openStatusMatrix = function (e) {
   const statusMatrix = document.querySelector(".matrix-window");
   statusMatrix.classList.add("open");
-  console.log(statusMatrix)
+  console.log(statusMatrix);
   colorStatusMatrix();
 };
 
@@ -250,13 +260,54 @@ export const addNewNote = function () {
     noteAll.unshift(note);
     createNewCard(note); //вызывается функция отрисовки колонок
     dragAndDrop();
-    showCountTodo()
+    showCountTodo();
     updateStorage(); //вызвать функцию сохранения данных
     closeModuleEntry();
-  } else {
-    alert("не заполнены поля");
+  } else if (!checkNodeValue(title)) {
+    errorTitle();
+  }
+  if (!checkNodeValue(descript)) {
+    errorContent();
+  }
+  if (!checkNodeValue(user) || !checkUserValue(user)) {
+    errorUser();
   }
 };
+// !___________________________________________________
+// !___________________________________________________
+// вывод красных границ при неверном введении данных
+const errorTitle = function () {
+  const title = document.querySelector(".entry__title");
+    title.classList.toggle("error");
+};
+export const notErrorTitle = function () {
+  const title = document.querySelector(".entry__title");
+  title.classList.remove("error");
+};
+
+const errorContent = function () {
+  const content = document.querySelector(".entry__content");
+    content.classList.toggle("error");
+};
+
+export const notErrorContent = function () {
+  const content = document.querySelector(".entry__content");
+  content.classList.remove("error");
+};
+
+const errorUser = function () {
+  const user = document.querySelector(".user__select");
+    user.classList.toggle("error");
+};
+
+export const notErrorUser = function () {
+  const user = document.querySelector(".user__select");
+  user.classList.remove("error");
+};
+
+// !___________________________________________________
+// !___________________________________________________
+
 //!______________добавление_данных_из_массива_________
 
 export const start = function () {
@@ -486,13 +537,28 @@ export const editNote = function (event) {
     editCard(note);
     closeModuleEntry();
     updateStorage(); //вызвать функцию сохранения данных
-  } else {
-    alert("не заполнены поля");
+  } else if (!checkNodeValue(titleValue)) {
+    errorTitle();
   }
-
-  console.log("noteAll finish", noteAll);
+  if (!checkNodeValue(contentValue)) {
+    errorContent();
+  }
+  if (!checkNodeValue(userValue) || !checkUserValue(userValue)) {
+    errorUser();
+    return;
+  }
 };
 //!__________________________________________________________
+//!__________________________________________________________
+export const editStatusNote = function (id, status) {
+  for (let i = 0; i < noteAll.length; i++) {
+    if (noteAll[i].id === +id) {
+      noteAll[i].status = status;
+    }
+    updateStorage(); //вызвать функцию сохранения данных
+  }
+};
+
 //!__________________________________________________________
 //!_______Смена_стилей_карточек_при_перетаскивании___
 
@@ -574,40 +640,36 @@ export let dragAndDrop = function () {
 
           changeClassCards(this);
           this.append(dragItem);
-          showCountTodo()
+          showCountTodo();
         });
       }
     }
   });
 };
 
-
 //!___________________Счетчик_карточек_в_блоке___
 
-export let showCountTodo = function(){
-  let countTodo = document.querySelector(".todo__counter") 
-  let todoLength = document.querySelectorAll(".card-todo").length
+export let showCountTodo = function () {
+  let countTodo = document.querySelector(".todo__counter");
+  let todoLength = document.querySelectorAll(".card-todo").length;
 
-  let countInProgress = document.querySelector(".progress__counter") 
-  let inProgressLength = document.querySelectorAll(".card-progress").length
+  let countInProgress = document.querySelector(".progress__counter");
+  let inProgressLength = document.querySelectorAll(".card-progress").length;
 
-  let countDone = document.querySelector(".done__counter ") 
-  let DoneLength = document.querySelectorAll(".card-done").length
+  let countDone = document.querySelector(".done__counter ");
+  let DoneLength = document.querySelectorAll(".card-done").length;
 
+  countTodo.textContent = todoLength;
+  countInProgress.textContent = inProgressLength;
+  countDone.textContent = DoneLength;
+};
 
-  countTodo.textContent = todoLength
-  countInProgress.textContent = inProgressLength
-  countDone.textContent = DoneLength 
-
-}
-
-export let checkPosishionCards = function(){
+export let checkPosishionCards = function () {
   let listItem = document.querySelectorAll(".card");
   let lists = document.querySelectorAll(".column__panel");
   let panelTodo = document.querySelector(".panel__todo");
-  let panelDone = document.querySelector(".panel__done")
-  let panelInProgress = document.querySelector(".panel__progress")
-
+  let panelDone = document.querySelector(".panel__done");
+  let panelInProgress = document.querySelector(".panel__progress");
 
   listItem.forEach(function (item) {
     let btnLeft = item.querySelector(".text__next-left");
@@ -616,8 +678,8 @@ export let checkPosishionCards = function(){
 
     let id = +item.getAttribute("data-key");
     let productId = noteAll.find((item) => item.id === id);
-    if(productId.position == "todo"){
-      panelTodo.appendChild(item)
+    if (productId.position == "todo") {
+      panelTodo.appendChild(item);
       item.classList.remove("card-progress");
       item.classList.remove("card-done");
       item.classList.add("card-todo");
@@ -625,8 +687,8 @@ export let checkPosishionCards = function(){
       btnRight.style.display = "block";
       btnEdit.style.display = "inline-block";
     }
-    if(productId.position == "in progress"){
-      panelInProgress.appendChild(item)
+    if (productId.position == "in progress") {
+      panelInProgress.appendChild(item);
       item.classList.add("card-progress");
       item.classList.remove("card-todo");
       item.classList.remove("card-done");
@@ -634,8 +696,8 @@ export let checkPosishionCards = function(){
       btnRight.style.display = "block";
       btnEdit.style.display = "none";
     }
-    if(productId.position == "done"){
-      panelDone.appendChild(item)
+    if (productId.position == "done") {
+      panelDone.appendChild(item);
       item.classList.add("card-done");
       item.classList.remove("card-todo");
       item.classList.remove("card-progress");
@@ -643,5 +705,7 @@ export let checkPosishionCards = function(){
       btnRight.style.display = "none";
       btnEdit.style.display = "none";
     }
-})
-}
+  });
+};
+// !_____________________________________________________
+// !_____________________________________________________
