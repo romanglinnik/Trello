@@ -44,6 +44,15 @@ for (let elem of document.querySelectorAll(".user__list")) {
   elem.addEventListener("click", select); // передаем элементам списка функцию выбора элемента
   elem.addEventListener("dblclick", toggleUserList); // передаем элементам списка функцию, которая прячет список Users
 }
+
+export const app = function () {
+  window.onload = function(){
+    window.setInterval(function(){
+    let now = new Date();
+    let clock = document.querySelector(".header__clock");
+    clock.innerHTML = now.toLocaleTimeString().slice(0, -3);
+    },1000);
+  };
   document.querySelector(".user__select").addEventListener("input", search); // при фокусе "input" происходит вызов функции поиска
   document
     .querySelector(".user__select")
@@ -122,3 +131,4 @@ for (let elem of document.querySelectorAll(".user__list")) {
     .querySelector(".radio__status-d")
     .addEventListener("click", checkStatusBoxes); //вызывает функцию изменения статуса "check-boxes"
 };
+}
