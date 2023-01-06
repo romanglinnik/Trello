@@ -35,6 +35,20 @@ let noteAll = [
 ];
 // !_________________________________________________________
 // !_________________________________________________________
+
+export const loadPage = function () {
+  const localNoteAll = localStorage.getItem("noteAll");
+  if (localNoteAll) {
+    noteAll = JSON.parse(localNoteAll);
+  }
+};
+// !___________________________________________________________
+// !!!!!!!!!!!!!!!! ПРИ КАЖДОМ ВНЕСЕНИИ ИЗМЕНЕНИЙ В МАССИВ "noteAll" (удаление, перетаскивание из колонки в колонку, редактирование карточек, добавление новых карточек и т.д.)  НЕОБХОДИМО ВЫЗВАТЬ ФУНКЦИЮ "upDateStorage"
+export const updateStorage = function () {
+  localStorage.setItem("noteAll", JSON.stringify(noteAll));
+};
+// !_________________________________________________________
+// !_________________________________________________________
 // отрисовка выпадающего списка
 export const select = function (e) {
   const name = e.target.getAttribute("data-name"); // Считываем значение выбранного элемента
@@ -237,7 +251,7 @@ export const addNewNote = function () {
     createNewCard(note); //вызывается функция отрисовки колонок
     dragAndDrop();
     showCountTodo()
-    // updateStorage(); //необходимо вызвать функцию сохранения данных
+    updateStorage(); //вызвать функцию сохранения данных
     closeModuleEntry();
   } else {
     alert("не заполнены поля");
@@ -471,7 +485,7 @@ export const editNote = function (event) {
     };
     editCard(note);
     closeModuleEntry();
-    // updateStorage(); //необходимо вызвать функцию сохранения данных
+    updateStorage(); //вызвать функцию сохранения данных
   } else {
     alert("не заполнены поля");
   }

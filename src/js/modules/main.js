@@ -2,6 +2,7 @@
 //!________________________________________________________
 //!________________________________________________________
 import {
+  loadPage,
   openUserList,
   closeUserList,
   search,
@@ -25,6 +26,10 @@ import {
 //!__________________________________________________________
 //!__________________________________________________________
 
+
+
+export const app = function () {
+loadPage();
 start();
 dragAndDrop();
 checkPosishionCards();
@@ -40,7 +45,6 @@ for (let elem of document.querySelectorAll(".user__list")) {
   elem.addEventListener("dblclick", toggleUserList); // передаем элементам списка функцию, которая прячет список Users
 }
 
-export const app = function () {
   window.onload = function(){
     window.setInterval(function(){
     let now = new Date();
@@ -48,6 +52,7 @@ export const app = function () {
     clock.innerHTML = now.toLocaleTimeString().slice(0, -3);
     },1000);
   };
+
   document.querySelector(".user__select").addEventListener("input", search); // при фокусе "input" происходит вызов функции поиска
   document
     .querySelector(".user__select")
