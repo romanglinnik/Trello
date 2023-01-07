@@ -1,6 +1,11 @@
 // * в модуле "render" добавляем элементы HTML
 
-import { getIdCard, closeStatusMatrix, openStatusMatrix } from "./func.js";
+import {
+  getIdCard,
+  closeStatusMatrix,
+  openStatusMatrix,
+  editStatusNote,
+} from "./func.js";
 
 export let createNewCard = function (obj) {
   let card = document.createElement("div");
@@ -14,6 +19,13 @@ export let createNewCard = function (obj) {
 
   let headCount = document.createElement("div");
   headCount.classList.add("head_count");
+
+  card.addEventListener("mouseover", () => {
+    card.classList.add("scale");
+  });
+  card.addEventListener("mouseout", () => {
+    card.classList.remove("scale");
+  });
   // !___________________________________________________
   // !___________________________________________________
   let colorBlock = document.createElement("div");
@@ -28,37 +40,15 @@ export let createNewCard = function (obj) {
   matrixStatusColor.classList.add("matrix-card__mark");
   matrixStatusColor.classList.add("mark");
   matrixStatusColor.innerText = "End";
-  matrixStatusColor.addEventListener("click", () => {
+  matrixStatusColor.addEventListener("click", (event) => {
+    const id = event.target.closest(".card-todo").getAttribute("data-key");
+    const status = event.target.getAttribute("data-status");
     statusMatrix.classList.remove("open");
-  }); //закрывает матрицу
+    editStatusNote(id, status);
+    console.log("Status: ", status)
+    console.log("id: ", id)
 
-  switch (obj.status) {
-    case "a":
-      colorBlock.dataset.status = "a";
-      matrixStatusColor.dataset.status = "a";
-      break;
-    case "b":
-      colorBlock.dataset.status = "b";
-      matrixStatusColor.dataset.status = "b";
-      break;
-    case "c":
-      colorBlock.dataset.status = "c";
-      matrixStatusColor.dataset.status = "c";
-      break;
-    case "d":
-      colorBlock.dataset.status = "d";
-      matrixStatusColor.dataset.status = "d";
-      break;
-  }
-  colorBlock.addEventListener("click", (event) => {
-    const target = event.target.getAttribute("class");
-    if (target !== "head_color mark") {
-      return;
-    }
-    {
-      statusMatrix.classList.add("open");
-    }
-  });
+  }); //закрывает матрицу
 
   const matrixName = document.createElement("h3");
   matrixName.classList.add("matrix__name_card");
@@ -75,6 +65,10 @@ export let createNewCard = function (obj) {
   radioStatusA.setAttribute("name", `status ${obj.id}`);
   radioStatusA.classList.add("matrix__status-a");
   radioStatusA.classList.add("matrix__radio");
+  radioStatusA.addEventListener("click", () => {
+    colorBlock.dataset.status = "a";
+    matrixStatusColor.dataset.status = "a";
+  });
 
   const labelStatusA = document.createElement("label");
   labelStatusA.setAttribute("for", "card-status-a");
@@ -92,6 +86,10 @@ export let createNewCard = function (obj) {
   radioStatusB.setAttribute("name", `status ${obj.id}`);
   radioStatusB.classList.add("matrix__status-b");
   radioStatusB.classList.add("matrix__radio");
+  radioStatusB.addEventListener("click", () => {
+    colorBlock.dataset.status = "b";
+    matrixStatusColor.dataset.status = "b";
+  });
 
   const labelStatusB = document.createElement("label");
   labelStatusB.setAttribute("for", "card-status-b");
@@ -109,11 +107,15 @@ export let createNewCard = function (obj) {
   radioStatusC.setAttribute("name", `status ${obj.id}`);
   radioStatusC.classList.add("matrix__status-c");
   radioStatusC.classList.add("matrix__radio");
+  radioStatusC.addEventListener("click", () => {
+    colorBlock.dataset.status = "c";
+    matrixStatusColor.dataset.status = "c";
+  });
 
   const labelStatusC = document.createElement("label");
   labelStatusC.setAttribute("for", "card-status-c");
   labelStatusC.classList.add("matrix__label");
-  labelStatusC.innerHTML = "<b>Not important & <br>Urgent</b>";
+  labelStatusC.innerHTML = "<b>Not important <br>& Urgent</b>";
 
   const itemStatusD = document.createElement("div");
   itemStatusD.classList.add("matrix-card__item");
@@ -126,11 +128,47 @@ export let createNewCard = function (obj) {
   radioStatusD.setAttribute("name", `status ${obj.id}`);
   radioStatusD.classList.add("matrix__status-d");
   radioStatusD.classList.add("matrix__radio");
+  radioStatusD.addEventListener("click", () => {
+    colorBlock.dataset.status = "d";
+    matrixStatusColor.dataset.status = "d";
+  });
 
   const labelStatusD = document.createElement("label");
   labelStatusD.setAttribute("for", "card-status-d");
   labelStatusD.classList.add("matrix__label");
-  labelStatusD.innerHTML = "<b>Not important & <br>Not urgent</b>"
+  labelStatusD.innerHTML = "<b>Not important <br>& Not urgent</b>";
+
+  switch (obj.status) {
+    case "a":
+      colorBlock.dataset.status = "a";
+      matrixStatusColor.dataset.status = "a";
+      radioStatusA.checked = true;
+      break;
+    case "b":
+      colorBlock.dataset.status = "b";
+      matrixStatusColor.dataset.status = "b";
+      radioStatusB.checked = true;
+      break;
+    case "c":
+      colorBlock.dataset.status = "c";
+      matrixStatusColor.dataset.status = "c";
+      radioStatusC.checked = true;
+      break;
+    case "d":
+      colorBlock.dataset.status = "d";
+      matrixStatusColor.dataset.status = "d";
+      radioStatusD.checked = true;
+      break;
+  }
+  colorBlock.addEventListener("click", (event) => {
+    const target = event.target.getAttribute("class");
+    if (target !== "head_color mark") {
+      return;
+    }
+    {
+      statusMatrix.classList.add("open");
+    }
+  });
 
   colorBlock.append(statusMatrix);
   statusMatrix.append(
