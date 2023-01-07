@@ -128,8 +128,8 @@ export const app = function () {
     });
 
   document
-    .querySelector(".matrix-window__mark")
-    .addEventListener("click", closeStatusMatrix); //вызывает функцию закрытия матрицы
+  .querySelector(".matrix-window__mark")
+  .addEventListener("click", closeStatusMatrix); //вызывает функцию закрытия матрицы
 
   document
     .querySelector(".radio__status-a")

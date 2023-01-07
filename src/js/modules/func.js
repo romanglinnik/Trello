@@ -593,6 +593,26 @@ let changeClassCards = function (item) {
   }
 };
 
+//!___________________Смена_position_в_локал_сторидж___ 
+
+let changePosition = function(item, pst){
+  let inProgress = document.querySelector(".panel__progress");
+  let done = document.querySelector(".panel__done");
+  let todo = document.querySelector(".panel__todo");
+
+  let id = +dragItem.getAttribute("data-key");
+
+  if (item.classList == inProgress.classList && pst.id == id) {
+    pst.position = "in progress"
+    
+  } else if (item.classList == done.classList && pst.id == id) {
+    pst.position = "done"
+  } else if(item.classList == todo.classList && pst.id == id) {
+    pst.position = "todo"
+  }
+ updateStorage()
+}
+
 //!___________________Перетаскивание_карточек_(drag_&_drop)___
 
 let dragItem = null;
@@ -640,6 +660,7 @@ export let dragAndDrop = function () {
 
           changeClassCards(this);
           this.append(dragItem);
+          changePosition(this, productId)
           showCountTodo();
         });
       }
@@ -664,6 +685,7 @@ export let showCountTodo = function () {
   countDone.textContent = DoneLength;
 };
 
+//!___________________Проверка_позиции______
 export let checkPosishionCards = function () {
   let listItem = document.querySelectorAll(".card");
   let lists = document.querySelectorAll(".column__panel");
