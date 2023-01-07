@@ -379,11 +379,14 @@ border: 2px solid transparent;
   font-size: 14px;
   transform: scale(0);
   z-index: 5;
+  transition: 0.4s;
+    transform-origin: 20px 20px;
 }
 
 .matrix.open {
   transform: scale(1);
-  transition: 50ms;
+  transition: 0.4s;
+
 }
 
 .mark {
