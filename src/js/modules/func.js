@@ -731,17 +731,23 @@ export let checkPosishionCards = function () {
 // !_____________________________________________________
 // !_____________________________________________________
 // удаление всех карточек из последней колонки
+const clearPanelDone = function () {
+  const panelDone = document.querySelectorAll(".card-done");
+  for (let i = 0; i < panelDone.length; i++) {
+    panelDone[i].remove();
+  }
+  const noteFilter = noteAll.filter((item) => item.position !== "done");
+  noteAll = noteFilter;
+  updateStorage();
+};
+
 export const deleteAll = function () {
   const panelDone = document.querySelectorAll(".card-done");
-  if (
-    panelDone.length !== 0 &&
-    confirm(`Вы точно хотите удалить все задачи?`)
-  ) {
-    for (let i = 0; i < panelDone.length; i++) {
-      panelDone[i].remove();
-    }
-    const noteFilter = noteAll.filter((item) => item.position !== "done");
-    noteAll = noteFilter;
+  if (panelDone.length !== 0) {
+    warningConfirm(
+      "Do you want to delete all completed tasks?",
+      clearPanelDone
+    );
   }
   updateStorage();
 };
@@ -749,15 +755,22 @@ export const deleteAll = function () {
 // !_____________________________________________________
 // !_____________________________________________________
 // удаление карточки
+export const removeCard = function (card, cardId) {
+  card.remove();
+  const noteFilter = noteAll.filter((item) => item.id !== +cardId);
+  noteAll = noteFilter;
+  updateStorage();
+};
+
 export const deleteCard = function (event) {
   const card = event.target.closest(".card");
   const cardId = card.getAttribute("data-key");
-  if (confirm(`Вы точно хотите удалить задачу?`)) {
-    card.remove();
-    const noteFilter = noteAll.filter((item) => item.id !== +cardId);
-    noteAll = noteFilter;
-  }
-  updateStorage();
+  warningConfirm(
+    "Do you want to delete the current task?",
+    removeCard,
+    card,
+    cardId
+  );
 };
 //!_____________________________________________________
 //!_____________________________________________________
@@ -845,14 +858,17 @@ export const moveToLeft = function (event) {
   const positionCard = noteAll[indexObj].position;
   switch (positionCard) {
     case "done":
-      if (lengthInProgress < 6) {
+      if (lengthInProgress >= 6) 
+      {
+        warningConfirm(
+          "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи. переместить в todo?",
+          moveToTodo,
+          card,
+          indexObj
+        );
+      } else
+      {
         moveToInProgress(card, indexObj);
-      } else if (
-        confirm(
-          "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи. переместить в todo?"
-        )
-      ) {
-        moveToTodo(card, indexObj);
       }
       break;
     case "in progress":
@@ -862,11 +878,11 @@ export const moveToLeft = function (event) {
 };
 //!_____________________________________________________
 //!_____________________________________________________
-// проверка второй колонки на при перемещении вправо
+// проверка второй колонки при перемещении вправо
 const returnNumberCards = function () {
   const lengthInProgress = document.querySelectorAll(".card-progress").length;
   if (lengthInProgress >= 6) {
-    alert(
+    warningAlert(
       "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"
     );
     return false;
@@ -877,3 +893,54 @@ const returnNumberCards = function () {
 };
 //!_____________________________________________________
 //!_____________________________________________________
+// вызов модального окна с двумя кнопками
+const warningConfirm = function (text, func, param1, param2) {
+  const warningModule = document.querySelector(".module__warning");
+  const warningText = document.querySelector(".warning__text");
+  const buttonContainer = document.querySelector(".button__container");
+  const btnYes = document.createElement("button");
+  const btnNo = document.createElement("button");
+  warningText.innerText = text;
+  warningModule.classList.add("open");
+  btnYes.classList.add("warning__button_ok");
+  btnYes.classList.add("button");
+  btnYes.innerText = "Yes";
+  btnNo.classList.add("warning__button_cancel");
+  btnNo.classList.add("button");
+  btnNo.innerText = "No";
+  buttonContainer.append(btnNo, btnYes);
+  btnYes.addEventListener("click", () => {
+    func(param1, param2);
+    clearWarningWindow();
+  });
+  btnNo.addEventListener("click", clearWarningWindow);
+};
+//!_____________________________________________________
+// вызов модального окна с одной кнопкой
+const warningAlert = function (text) {
+  const warningModule = document.querySelector(".module__warning");
+  const warningText = document.querySelector(".warning__text");
+  const buttonContainer = document.querySelector(".button__container");
+  const btnYes = document.createElement("button");
+  warningText.innerText = text;
+  warningModule.classList.add("open");
+  btnYes.classList.add("warning__button_ok");
+  btnYes.classList.add("button");
+  btnYes.innerText = "Yes";
+    buttonContainer.append(btnYes);
+  btnYes.addEventListener("click", () => {
+    clearWarningWindow();
+  });
+};
+// !___________________________________________________________
+// функция очистки модального окна warning
+const clearWarningWindow = function () {
+  const warningModule = document.querySelector(".module__warning");
+  const warningText = document.querySelector(".warning__text");
+  const btnOk = document.querySelector(".warning__button_ok");
+  const btnCancel = document.querySelector(".warning__button_cancel");
+  warningText.innerText = "";
+  warningModule.classList.remove("open");
+  btnOk.remove();
+  btnCancel.remove();
+};

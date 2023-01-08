@@ -54,7 +54,7 @@
     <div class="module module__entry">
         <span class="module__background"></span>
         <!-- !____Модальное окно записи карточки________________ -->
-        <div class="entry__container">
+        <div class="module__container entry__container">
             <input class="entry__title" type="text" placeholder="Title">
             <!-- *__________Определение статуса (важность / срочность)_________________________________ -->
             <div class="entry__status">
@@ -85,20 +85,24 @@
                         <p class="matrix__y matrix__y1">Important</p>
                         <div class="matrix__item matrix-window__item item__status-a">
                             <input class="matrix__radio radio__status-a" type="radio" id="status-a" name="status">
-                            <label class="matrix__label" for="status-a"><b>Do: </b>Tasks with deadlines or consequences.</label>
+                            <label class="matrix__label" for="status-a"><b>Do: </b>Tasks with deadlines or
+                                consequences.</label>
                         </div>
                         <div class="matrix__item matrix-window__item item__status-b">
                             <input class="matrix__radio radio__status-b" type="radio" id="status-b" name="status">
-                            <label class="matrix__label" for="status-b"><b>Schedule: </b>Tasks with unclear deadlines that contribute to long-term success.</label>
+                            <label class="matrix__label" for="status-b"><b>Schedule: </b>Tasks with unclear deadlines
+                                that contribute to long-term success.</label>
                         </div>
                         <p class="matrix__y matrix__y2">Not important</p>
                         <div class="matrix__item matrix-window__item item__status-c">
                             <input class="matrix__radio radio__status-c" type="radio" id="status-c" name="status">
-                            <label class="matrix__label" for="status-c"><b>Delegate: </b>Tasks that must get done but don't require your specific skill set.</label>
+                            <label class="matrix__label" for="status-c"><b>Delegate: </b>Tasks that must get done but
+                                don't require your specific skill set.</label>
                         </div>
                         <div class="matrix__item matrix-window__item item__status-d">
                             <input class="matrix__radio radio__status-d" type="radio" id="status-d" name="status">
-                            <label class="matrix__label" for="status-d"><b>Delete: </b>Distractions and unnecessary tasks.</label>
+                            <label class="matrix__label" for="status-d"><b>Delete: </b>Distractions and unnecessary
+                                tasks.</label>
                         </div>
                     </div>
                     <!-- ?_______Конец матрицы Эйзенхауэра_________________________________________ -->
@@ -128,10 +132,17 @@
     <div class="module module__warning">
         <span class="module__background"></span>
         <!-- !________________Модальное окно вывода предупреждений и ошибок___________________ -->
-        <!-- *__________________________Место для кода Влада (при добавлении события, для того чтобы появлялся затемненный фон, необходимо обращаться к ".module__warning")_________________________________________ -->
+        <div class="module__container warning__container">
+            <p class="warning__text"></p>
+            <div class="button__container">
+                <!-- <button class="button warning__button_ok">ok</button> -->
+                <!-- <button class="button warning__button_cancel">Cancel</button> -->
+            </div>
+        </div>
         <!-- !________________Конец модального окно вывода предупреждений и ошибок___________________ -->
     </div>
     <!-- !______________________________________________________________ -->
     <script src="./js/app.js" type="module"></script>
 </body>
+
 </html>

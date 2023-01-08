@@ -177,17 +177,13 @@ body {
   opacity: 1;
 }
 
-.entry__container {
+.module__container {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40em;
-  height: 20em;
   display: grid;
   gap: 1em;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: 1fr 3fr 1fr;
+  transform: translate(-50%, -50%);
   background: linear-gradient(#b5aab6, #dcbcc5);
   /* background: linear-gradient(#86eb65, #8ec460); */
   /* background: linear-gradient(#aaa, #777); */
@@ -196,6 +192,13 @@ body {
   text-shadow: 0 2px 2px #666;
   padding: 1em;
   z-index: 10;
+}
+
+.entry__container {
+  width: 40em;
+  height: 20em;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 1fr 3fr 1fr;
 }
 
 .entry__content,
@@ -214,8 +217,8 @@ body {
     inset -.2rem -.2rem .5rem #b5aab6;
   /* box-shadow: inset .2rem .2rem .5rem #777,
         inset -.2rem -.2rem .5rem #aaa; */
-transition: 0.3s;
-border: 2px solid transparent;
+  transition: 0.3s;
+  border: 2px solid transparent;
 }
 
 @keyframes blink {
@@ -229,7 +232,7 @@ border: 2px solid transparent;
 .user__select.error {
   /* border: 3px solid #A64E4E; */
   animation: blink .9s step-end infinite alternate;
-  
+
 }
 
 .entry__title:focus,
@@ -380,7 +383,7 @@ border: 2px solid transparent;
   transform: scale(0);
   z-index: 5;
   transition: 0.4s;
-    transform-origin: 20px 20px;
+  transform-origin: 20px 20px;
 }
 
 .matrix.open {
@@ -753,4 +756,41 @@ div[data-status="d"],
 .hide {
   display: none;
 
+}
+
+
+/* !_______________________________________ */
+/* !_______________________________________ */
+.module__warning.open {
+  display: block;
+  transition: 1s;
+  opacity: 1;
+}
+
+.warning__text {
+  color: #444;
+  display: block;
+  text-align: center;
+  /* width: 80%;
+  height: 70%; */
+}
+
+.warning__container {
+  width: 30em;
+  height: 15em;
+  grid-template-rows: 1fr 40px;
+  padding: 30px;
+}
+
+.button__container {
+  display: flex;
+  gap: 20px;
+  justify-content: end;
+
+}
+
+.button.warning__button_ok,
+.button.warning__button_cancel {
+  width: 100px;
+  height: 40px;
 }
