@@ -678,7 +678,10 @@ export let dragAndDrop = function () {
             this.style.backgroundColor = `rgba(0,0,0,0)`;
             e.preventDefault(); 
             console.log(document.querySelectorAll(".card-progress").length)
-            alert("Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"); 
+            // alert("Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"); 
+            warningAlert(
+              "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"
+            );
           } 
         }); 
       }
@@ -750,17 +753,23 @@ export let checkPosishionCards = function () {
 // !_____________________________________________________
 // !_____________________________________________________
 // удаление всех карточек из последней колонки
+const clearPanelDone = function () {
+  const panelDone = document.querySelectorAll(".card-done");
+  for (let i = 0; i < panelDone.length; i++) {
+    panelDone[i].remove();
+  }
+  const noteFilter = noteAll.filter((item) => item.position !== "done");
+  noteAll = noteFilter;
+  updateStorage();
+};
+
 export const deleteAll = function () {
   const panelDone = document.querySelectorAll(".card-done");
-  if (
-    panelDone.length !== 0 &&
-    confirm(`Вы точно хотите удалить все задачи?`)
-  ) {
-    for (let i = 0; i < panelDone.length; i++) {
-      panelDone[i].remove();
-    }
-    const noteFilter = noteAll.filter((item) => item.position !== "done");
-    noteAll = noteFilter;
+  if (panelDone.length !== 0) {
+    warningConfirm(
+      "Do you want to delete all completed tasks?",
+      clearPanelDone
+    );
   }
   updateStorage();
 };
@@ -768,53 +777,66 @@ export const deleteAll = function () {
 // !_____________________________________________________
 // !_____________________________________________________
 // удаление карточки
-export const deleteCard = function (event) {
-  const card = event.target.closest(".card");
-  const cardId = card.getAttribute("data-key");
-  if (confirm(`Вы точно хотите удалить задачу?`)) {
-    card.remove();
-    const noteFilter = noteAll.filter((item) => item.id !== +cardId);
-    noteAll = noteFilter;
-  }
+export const removeCard = function (card, cardId) {
+  card.remove();
+  const noteFilter = noteAll.filter((item) => item.id !== +cardId);
+  noteAll = noteFilter;
   updateStorage();
 };
 
-//!_____________________________________________________
-//!_____________________________________________________
-//  перемещение из первой колонки во вторую
-const moveTodoInProgress = function (event) {
+export const deleteCard = function (event) {
   const card = event.target.closest(".card");
   const cardId = card.getAttribute("data-key");
+  warningConfirm(
+    "Do you want to delete the current task?",
+    removeCard,
+    card,
+    cardId
+  );
+};
+//!_____________________________________________________
+//!_____________________________________________________
+// перемещение в первую колонку
+const moveToTodo = function (card, indexObj) {
+  const panelTodo = document.querySelector(".panel__todo");
+  const btnLeft = card.querySelector(".text__next-left");
+  const btnRight = card.querySelector(".text__next-right");
+  const btnEdit = card.querySelector(".buttons__edit");
+  panelTodo.prepend(card);
+  card.classList.remove("card-progress");
+  card.classList.remove("card-done");
+  card.classList.add("card-todo");
+  btnLeft.style.display = "none";
+  btnRight.style.display = "block";
+  btnEdit.style.display = "inline-block";
+  noteAll[indexObj].position = "todo";
+  updateStorage();
+  showCountTodo();
+};
+//!_____________________________________________________
+//  перемещение во вторую колонку
+const moveToInProgress = function (card, indexObj) {
   const panelInProgress = document.querySelector(".panel__progress");
   const btnLeft = card.querySelector(".text__next-left");
   const btnRight = card.querySelector(".text__next-right");
   const btnEdit = card.querySelector(".buttons__edit");
-  const indexObj = noteAll.findIndex((element) => element.id === +cardId);
-  if (returnNumberCards()) {
-    card.classList.add("card-progress");
-    card.classList.remove("card-todo");
-    card.classList.remove("card-done");
-    btnLeft.style.display = "block";
-    btnRight.style.display = "block";
-    btnEdit.style.display = "none";
-    panelInProgress.prepend(card);
-    noteAll[indexObj].position = "in progress";
-    updateStorage();
-    showCountTodo();
-  }
+  card.classList.add("card-progress");
+  card.classList.remove("card-todo");
+  card.classList.remove("card-done");
+  btnLeft.style.display = "block";
+  btnRight.style.display = "block";
+  btnEdit.style.display = "none";
+  panelInProgress.prepend(card);
+  noteAll[indexObj].position = "in progress";
+  updateStorage();
+  showCountTodo();
   {
     return;
   }
-}
+};
 //!_____________________________________________________
-//  перемещение из второй колонки в третью
-const moveInProgressDone = function (event) {
-  const card = event.target.closest(".card");
-  console.log(card);
-  const cardId = card.getAttribute("data-key");
-  console.log(cardId);
-  const indexObj = noteAll.findIndex((element) => element.id === +cardId);
-  console.log(indexObj);
+//  перемещение в третью колонку
+const moveToDone = function (card, indexObj) {
   const panelDone = document.querySelector(".panel__done");
   const btnLeft = card.querySelector(".text__next-left");
   const btnRight = card.querySelector(".text__next-right");
@@ -832,22 +854,57 @@ const moveInProgressDone = function (event) {
 };
 //!_____________________________________________________
 // переместить вправо
-export const moveToRight = function (event){
-const card = event.target.closest(".card");
-console.log(card);
-const cardId = card.getAttribute("data-key");
-console.log(cardId);
-const indexObj = noteAll.findIndex((element) => element.id === +cardId);
-console.log(indexObj);
-
-}
+export const moveToRight = function (event) {
+  const card = event.target.closest(".card");
+  const cardId = card.getAttribute("data-key");
+  const indexObj = noteAll.findIndex((element) => element.id === +cardId);
+  const positionCard = noteAll[indexObj].position;
+  switch (positionCard) {
+    case "todo":
+      if (returnNumberCards("todo")) {
+        moveToInProgress(card, indexObj);
+      }
+      break;
+    case "in progress":
+      moveToDone(card, indexObj);
+      break;
+  }
+};
+//!_____________________________________________________
+// переместить влево
+export const moveToLeft = function (event) {
+  const card = event.target.closest(".card");
+  const cardId = card.getAttribute("data-key");
+  const lengthInProgress = document.querySelectorAll(".card-progress").length;
+  const indexObj = noteAll.findIndex((element) => element.id === +cardId);
+  const positionCard = noteAll[indexObj].position;
+  switch (positionCard) {
+    case "done":
+      if (lengthInProgress >= 6) 
+      {
+        warningConfirm(
+          "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи. переместить в todo?",
+          moveToTodo,
+          card,
+          indexObj
+        );
+      } else
+      {
+        moveToInProgress(card, indexObj);
+      }
+      break;
+    case "in progress":
+      moveToTodo(card, indexObj);
+      break;
+  }
+};
 //!_____________________________________________________
 //!_____________________________________________________
-// проверка второй колонки на 6
+// проверка второй колонки при перемещении вправо
 const returnNumberCards = function () {
   const lengthInProgress = document.querySelectorAll(".card-progress").length;
   if (lengthInProgress >= 6) {
-    alert(
+    warningAlert(
       "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"
     );
     return false;
@@ -857,3 +914,56 @@ const returnNumberCards = function () {
   }
 };
 
+//!_____________________________________________________
+//!_____________________________________________________
+// вызов модального окна с двумя кнопками
+const warningConfirm = function (text, func, param1, param2) {
+  const warningModule = document.querySelector(".module__warning");
+  const warningText = document.querySelector(".warning__text");
+  const buttonContainer = document.querySelector(".button__container");
+  const btnYes = document.createElement("button");
+  const btnNo = document.createElement("button");
+  warningText.innerText = text;
+  warningModule.classList.add("open");
+  btnYes.classList.add("warning__button_ok");
+  btnYes.classList.add("button");
+  btnYes.innerText = "Yes";
+  btnNo.classList.add("warning__button_cancel");
+  btnNo.classList.add("button");
+  btnNo.innerText = "No";
+  buttonContainer.append(btnNo, btnYes);
+  btnYes.addEventListener("click", () => {
+    func(param1, param2);
+    clearWarningWindow();
+  });
+  btnNo.addEventListener("click", clearWarningWindow);
+};
+//!_____________________________________________________
+// вызов модального окна с одной кнопкой
+const warningAlert = function (text) {
+  const warningModule = document.querySelector(".module__warning");
+  const warningText = document.querySelector(".warning__text");
+  const buttonContainer = document.querySelector(".button__container");
+  const btnYes = document.createElement("button");
+  warningText.innerText = text;
+  warningModule.classList.add("open");
+  btnYes.classList.add("warning__button_ok");
+  btnYes.classList.add("button");
+  btnYes.innerText = "Yes";
+    buttonContainer.append(btnYes);
+  btnYes.addEventListener("click", () => {
+    clearWarningWindow();
+  });
+};
+// !___________________________________________________________
+// функция очистки модального окна warning
+const clearWarningWindow = function () {
+  const warningModule = document.querySelector(".module__warning");
+  const warningText = document.querySelector(".warning__text");
+  const btnOk = document.querySelector(".warning__button_ok");
+  const btnCancel = document.querySelector(".warning__button_cancel");
+  warningText.innerText = "";
+  warningModule.classList.remove("open");
+  btnOk.remove();
+  btnCancel.remove();
+};
