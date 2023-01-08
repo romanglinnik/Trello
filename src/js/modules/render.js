@@ -5,6 +5,8 @@ import {
   closeStatusMatrix,
   openStatusMatrix,
   editStatusNote,
+  deleteCard,
+  moveToRight,
 } from "./func.js";
 
 export let createNewCard = function (obj) {
@@ -218,6 +220,7 @@ export let createNewCard = function (obj) {
   btnDelete.classList.add("buttons__delete");
   btnDelete.classList.add("button-card");
   btnDelete.innerHTML = "Delete";
+  btnDelete.addEventListener("click", deleteCard); //вызов удаления карты
 
   let text = document.createElement("div");
   text.classList.add("card__text");
@@ -238,6 +241,7 @@ export let createNewCard = function (obj) {
   btnNext2.classList.add("text__next-right");
   btnNext2.classList.add("button-card");
   btnNext2.innerHTML = "&#62;";
+  btnNext2.addEventListener("click", moveToRight); //!кнопка перемещения
 
   let data = document.createElement("div");
   data.classList.add("card__data");
