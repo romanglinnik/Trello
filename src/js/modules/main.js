@@ -25,6 +25,7 @@ import {
   notErrorUser,
   notErrorTitle,
   notErrorContent,
+  deleteAll,
 } from "./func.js";
 //!__________________________________________________________
 //!__________________________________________________________
@@ -143,4 +144,6 @@ export const app = function () {
   document
     .querySelector(".radio__status-d")
     .addEventListener("click", checkStatusBoxes); //вызывает функцию изменения статуса "check-boxes"
-};
+
+document.querySelector(".button__done-delete").addEventListener("click", deleteAll);
+  };

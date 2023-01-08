@@ -5,6 +5,8 @@ import {
   closeStatusMatrix,
   openStatusMatrix,
   editStatusNote,
+  deleteCard,
+  moveToRight,
 } from "./func.js";
 
 export let createNewCard = function (obj) {
@@ -20,12 +22,12 @@ export let createNewCard = function (obj) {
   let headCount = document.createElement("div");
   headCount.classList.add("head_count");
 
-  card.addEventListener("mouseover", () => {
-    card.classList.add("scale");
-  });
-  card.addEventListener("mouseout", () => {
-    card.classList.remove("scale");
-  });
+  // card.addEventListener("mouseover", () => {
+  //   card.classList.add("scale");
+  // });
+  // card.addEventListener("mouseout", () => {
+  //   card.classList.remove("scale");
+  // });
   // !___________________________________________________
   // !___________________________________________________
   let colorBlock = document.createElement("div");
@@ -40,14 +42,29 @@ export let createNewCard = function (obj) {
   matrixStatusColor.classList.add("matrix-card__mark");
   matrixStatusColor.classList.add("mark");
   matrixStatusColor.innerText = "End";
+
   matrixStatusColor.addEventListener("click", (event) => {
-    const id = event.target.closest(".card-todo").getAttribute("data-key");
+    const id = event.target.closest(".card").getAttribute("data-key");
     const status = event.target.getAttribute("data-status");
     statusMatrix.classList.remove("open");
     editStatusNote(id, status);
-    console.log("Status: ", status)
-    console.log("id: ", id)
+    console.log("id", id);
+    console.log("status", status);
+  }); //закрывает матрицу
 
+  statusMatrix.addEventListener("mouseover", () => {
+    statusMatrix.classList.add("open");
+  });
+
+  statusMatrix.addEventListener("mouseout", (event) => {
+    const id = event.target.closest(".card").getAttribute("data-key");
+    const status = event.target
+      .closest(".head_color")
+      .getAttribute("data-status");
+    statusMatrix.classList.remove("open");
+    editStatusNote(id, status);
+    console.log("id", id)
+    console.log("status", status)
   }); //закрывает матрицу
 
   const matrixName = document.createElement("h3");
@@ -203,6 +220,7 @@ export let createNewCard = function (obj) {
   btnDelete.classList.add("buttons__delete");
   btnDelete.classList.add("button-card");
   btnDelete.innerHTML = "Delete";
+  btnDelete.addEventListener("click", deleteCard); //вызов удаления карты
 
   let text = document.createElement("div");
   text.classList.add("card__text");
@@ -223,6 +241,7 @@ export let createNewCard = function (obj) {
   btnNext2.classList.add("text__next-right");
   btnNext2.classList.add("button-card");
   btnNext2.innerHTML = "&#62;";
+  btnNext2.addEventListener("click", moveToRight); //!кнопка перемещения
 
   let data = document.createElement("div");
   data.classList.add("card__data");

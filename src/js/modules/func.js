@@ -278,7 +278,7 @@ export const addNewNote = function () {
 // вывод красных границ при неверном введении данных
 const errorTitle = function () {
   const title = document.querySelector(".entry__title");
-    title.classList.toggle("error");
+  title.classList.toggle("error");
 };
 export const notErrorTitle = function () {
   const title = document.querySelector(".entry__title");
@@ -287,7 +287,7 @@ export const notErrorTitle = function () {
 
 const errorContent = function () {
   const content = document.querySelector(".entry__content");
-    content.classList.toggle("error");
+  content.classList.toggle("error");
 };
 
 export const notErrorContent = function () {
@@ -297,7 +297,7 @@ export const notErrorContent = function () {
 
 const errorUser = function () {
   const user = document.querySelector(".user__select");
-    user.classList.toggle("error");
+  user.classList.toggle("error");
 };
 
 export const notErrorUser = function () {
@@ -593,9 +593,9 @@ let changeClassCards = function (item) {
   }
 };
 
-//!___________________Смена_position_в_локал_сторидж___ 
+//!___________________Смена_position_в_локал_сторидж___
 
-let changePosition = function(item, pst){
+let changePosition = function (item, pst) {
   let inProgress = document.querySelector(".panel__progress");
   let done = document.querySelector(".panel__done");
   let todo = document.querySelector(".panel__todo");
@@ -603,15 +603,14 @@ let changePosition = function(item, pst){
   let id = +dragItem.getAttribute("data-key");
 
   if (item.classList == inProgress.classList && pst.id == id) {
-    pst.position = "in progress"
-    
+    pst.position = "in progress";
   } else if (item.classList == done.classList && pst.id == id) {
-    pst.position = "done"
-  } else if(item.classList == todo.classList && pst.id == id) {
-    pst.position = "todo"
+    pst.position = "done";
+  } else if (item.classList == todo.classList && pst.id == id) {
+    pst.position = "todo";
   }
- updateStorage()
-}
+  updateStorage();
+};
 
 //!___________________Перетаскивание_карточек_(drag_&_drop)___
 
@@ -660,7 +659,7 @@ export let dragAndDrop = function () {
 
           changeClassCards(this);
           this.append(dragItem);
-          changePosition(this, productId)
+          changePosition(this, productId);
           showCountTodo();
         });
       }
@@ -731,3 +730,110 @@ export let checkPosishionCards = function () {
 };
 // !_____________________________________________________
 // !_____________________________________________________
+// удаление всех карточек из последней колонки
+export const deleteAll = function () {
+  const panelDone = document.querySelectorAll(".card-done");
+  if (
+    panelDone.length !== 0 &&
+    confirm(`Вы точно хотите удалить все задачи?`)
+  ) {
+    for (let i = 0; i < panelDone.length; i++) {
+      panelDone[i].remove();
+    }
+    const noteFilter = noteAll.filter((item) => item.position !== "done");
+    noteAll = noteFilter;
+  }
+  updateStorage();
+};
+
+// !_____________________________________________________
+// !_____________________________________________________
+// удаление карточки
+export const deleteCard = function (event) {
+  const card = event.target.closest(".card");
+  const cardId = card.getAttribute("data-key");
+  if (confirm(`Вы точно хотите удалить задачу?`)) {
+    card.remove();
+    const noteFilter = noteAll.filter((item) => item.id !== +cardId);
+    noteAll = noteFilter;
+  }
+  updateStorage();
+};
+
+//!_____________________________________________________
+//!_____________________________________________________
+//  перемещение из первой колонки во вторую
+const moveTodoInProgress = function (event) {
+  const card = event.target.closest(".card");
+  const cardId = card.getAttribute("data-key");
+  const panelInProgress = document.querySelector(".panel__progress");
+  const btnLeft = card.querySelector(".text__next-left");
+  const btnRight = card.querySelector(".text__next-right");
+  const btnEdit = card.querySelector(".buttons__edit");
+  const indexObj = noteAll.findIndex((element) => element.id === +cardId);
+  if (returnNumberCards()) {
+    card.classList.add("card-progress");
+    card.classList.remove("card-todo");
+    card.classList.remove("card-done");
+    btnLeft.style.display = "block";
+    btnRight.style.display = "block";
+    btnEdit.style.display = "none";
+    panelInProgress.prepend(card);
+    noteAll[indexObj].position = "in progress";
+    updateStorage();
+    showCountTodo();
+  }
+  {
+    return;
+  }
+}
+//!_____________________________________________________
+//  перемещение из второй колонки в третью
+const moveInProgressDone = function (event) {
+  const card = event.target.closest(".card");
+  console.log(card);
+  const cardId = card.getAttribute("data-key");
+  console.log(cardId);
+  const indexObj = noteAll.findIndex((element) => element.id === +cardId);
+  console.log(indexObj);
+  const panelDone = document.querySelector(".panel__done");
+  const btnLeft = card.querySelector(".text__next-left");
+  const btnRight = card.querySelector(".text__next-right");
+  const btnEdit = card.querySelector(".buttons__edit");
+  panelDone.prepend(card);
+  card.classList.add("card-done");
+  card.classList.remove("card-todo");
+  card.classList.remove("card-progress");
+  btnLeft.style.display = "block";
+  btnRight.style.display = "none";
+  btnEdit.style.display = "none";
+  noteAll[indexObj].position = "done";
+  updateStorage();
+  showCountTodo();
+};
+//!_____________________________________________________
+// переместить вправо
+export const moveToRight = function (event){
+const card = event.target.closest(".card");
+console.log(card);
+const cardId = card.getAttribute("data-key");
+console.log(cardId);
+const indexObj = noteAll.findIndex((element) => element.id === +cardId);
+console.log(indexObj);
+
+}
+//!_____________________________________________________
+//!_____________________________________________________
+// проверка второй колонки на 6
+const returnNumberCards = function () {
+  const lengthInProgress = document.querySelectorAll(".card-progress").length;
+  if (lengthInProgress >= 6) {
+    alert(
+      "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"
+    );
+    return false;
+  }
+  {
+    return true;
+  }
+};
