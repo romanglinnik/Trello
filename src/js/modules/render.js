@@ -7,6 +7,7 @@ import {
   editStatusNote,
   deleteCard,
   moveToRight,
+  moveToLeft,
 } from "./func.js";
 
 export let createNewCard = function (obj) {
@@ -236,6 +237,7 @@ export let createNewCard = function (obj) {
   btnNext1.classList.add("text__next-left");
   btnNext1.classList.add("button-card");
   btnNext1.innerHTML = "&#60;";
+  btnNext1.addEventListener("click", moveToLeft);
 
   let btnNext2 = document.createElement("button");
   btnNext2.classList.add("text__next-right");

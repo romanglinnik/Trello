@@ -759,43 +759,49 @@ export const deleteCard = function (event) {
   }
   updateStorage();
 };
-
 //!_____________________________________________________
 //!_____________________________________________________
-//  перемещение из первой колонки во вторую
-const moveTodoInProgress = function (event) {
-  const card = event.target.closest(".card");
-  const cardId = card.getAttribute("data-key");
+// перемещение в первую колонку
+const moveToTodo = function (card, indexObj) {
+  const panelTodo = document.querySelector(".panel__todo");
+  const btnLeft = card.querySelector(".text__next-left");
+  const btnRight = card.querySelector(".text__next-right");
+  const btnEdit = card.querySelector(".buttons__edit");
+  panelTodo.prepend(card);
+  card.classList.remove("card-progress");
+  card.classList.remove("card-done");
+  card.classList.add("card-todo");
+  btnLeft.style.display = "none";
+  btnRight.style.display = "block";
+  btnEdit.style.display = "inline-block";
+  noteAll[indexObj].position = "todo";
+  updateStorage();
+  showCountTodo();
+};
+//!_____________________________________________________
+//  перемещение во вторую колонку
+const moveToInProgress = function (card, indexObj) {
   const panelInProgress = document.querySelector(".panel__progress");
   const btnLeft = card.querySelector(".text__next-left");
   const btnRight = card.querySelector(".text__next-right");
   const btnEdit = card.querySelector(".buttons__edit");
-  const indexObj = noteAll.findIndex((element) => element.id === +cardId);
-  if (returnNumberCards()) {
-    card.classList.add("card-progress");
-    card.classList.remove("card-todo");
-    card.classList.remove("card-done");
-    btnLeft.style.display = "block";
-    btnRight.style.display = "block";
-    btnEdit.style.display = "none";
-    panelInProgress.prepend(card);
-    noteAll[indexObj].position = "in progress";
-    updateStorage();
-    showCountTodo();
-  }
+  card.classList.add("card-progress");
+  card.classList.remove("card-todo");
+  card.classList.remove("card-done");
+  btnLeft.style.display = "block";
+  btnRight.style.display = "block";
+  btnEdit.style.display = "none";
+  panelInProgress.prepend(card);
+  noteAll[indexObj].position = "in progress";
+  updateStorage();
+  showCountTodo();
   {
     return;
   }
-}
+};
 //!_____________________________________________________
-//  перемещение из второй колонки в третью
-const moveInProgressDone = function (event) {
-  const card = event.target.closest(".card");
-  console.log(card);
-  const cardId = card.getAttribute("data-key");
-  console.log(cardId);
-  const indexObj = noteAll.findIndex((element) => element.id === +cardId);
-  console.log(indexObj);
+//  перемещение в третью колонку
+const moveToDone = function (card, indexObj) {
   const panelDone = document.querySelector(".panel__done");
   const btnLeft = card.querySelector(".text__next-left");
   const btnRight = card.querySelector(".text__next-right");
@@ -813,18 +819,50 @@ const moveInProgressDone = function (event) {
 };
 //!_____________________________________________________
 // переместить вправо
-export const moveToRight = function (event){
-const card = event.target.closest(".card");
-console.log(card);
-const cardId = card.getAttribute("data-key");
-console.log(cardId);
-const indexObj = noteAll.findIndex((element) => element.id === +cardId);
-console.log(indexObj);
-
-}
+export const moveToRight = function (event) {
+  const card = event.target.closest(".card");
+  const cardId = card.getAttribute("data-key");
+  const indexObj = noteAll.findIndex((element) => element.id === +cardId);
+  const positionCard = noteAll[indexObj].position;
+  switch (positionCard) {
+    case "todo":
+      if (returnNumberCards("todo")) {
+        moveToInProgress(card, indexObj);
+      }
+      break;
+    case "in progress":
+      moveToDone(card, indexObj);
+      break;
+  }
+};
+//!_____________________________________________________
+// переместить влево
+export const moveToLeft = function (event) {
+  const card = event.target.closest(".card");
+  const cardId = card.getAttribute("data-key");
+  const lengthInProgress = document.querySelectorAll(".card-progress").length;
+  const indexObj = noteAll.findIndex((element) => element.id === +cardId);
+  const positionCard = noteAll[indexObj].position;
+  switch (positionCard) {
+    case "done":
+      if (lengthInProgress < 6) {
+        moveToInProgress(card, indexObj);
+      } else if (
+        confirm(
+          "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи. переместить в todo?"
+        )
+      ) {
+        moveToTodo(card, indexObj);
+      }
+      break;
+    case "in progress":
+      moveToTodo(card, indexObj);
+      break;
+  }
+};
 //!_____________________________________________________
 //!_____________________________________________________
-// проверка второй колонки на 6
+// проверка второй колонки на при перемещении вправо
 const returnNumberCards = function () {
   const lengthInProgress = document.querySelectorAll(".card-progress").length;
   if (lengthInProgress >= 6) {
@@ -837,3 +875,5 @@ const returnNumberCards = function () {
     return true;
   }
 };
+//!_____________________________________________________
+//!_____________________________________________________
