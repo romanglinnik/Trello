@@ -75,7 +75,7 @@ body {
 
 .section__board {
   display: flex;
-  gap: 30px;
+  gap: 20px;
   height: 80%;
   width: 100%;
   border-radius: 15px;
