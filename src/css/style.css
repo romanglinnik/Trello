@@ -128,9 +128,9 @@ body {
 }
 
 .column__panel::-webkit-scrollbar-thumb {
-  background-color: #ffffff;
+  background-color: rgb(203, 202, 202);
   border-radius: 20px;
-  border: 3px solid #ffffff
+  border: 2px solid #aaa
 }
 
 .column__header {
@@ -156,7 +156,7 @@ body {
   right: 0;
   display: none;
   opacity: 0;
-  transition: 1s;
+  transition: 0.4s;
 }
 
 .module__background {
@@ -218,7 +218,7 @@ body {
   /* box-shadow: inset .2rem .2rem .5rem #777,
         inset -.2rem -.2rem .5rem #aaa; */
   transition: 0.3s;
-  border: 2px solid transparent;
+  border: 3px solid transparent;
 }
 
 @keyframes blink {
@@ -319,7 +319,7 @@ body {
   /* background: #dcbcc5; */
   background: #aaa;
   box-shadow: 0 2px 2px #444;
-  border: 2px solid transparent;
+  border: 3px solid transparent;
 }
 
 .user__list {
@@ -333,12 +333,12 @@ body {
   /* background: #dcbcc5; */
   background: #aaa;
   box-shadow: 0 2px 2px #444;
-  transition: 0.2s;
+  transition: 0.3s;
 }
 
 .user__list.open {
   display: block;
-  transition: .2s visibility linear, .2s opacity linear;
+  transition: .3s visibility linear, .3s opacity linear;
   opacity: 1;
 }
 
@@ -642,12 +642,12 @@ div[data-status="d"],
   color: #444;
   text-shadow: none;
   transform: scale(1);
-  transition: .2s
+  transition: .4s
 }
 
 .card.scale {
   transform: scale(1.05);
-  transition: .2s;
+  transition: .4s;
   z-index: 10;
 }
 
@@ -673,6 +673,10 @@ div[data-status="d"],
   justify-content: space-between;
 }
 
+.head__title {
+  font-weight: bold;
+}
+
 .card__head {
   height: 25px;
 }
@@ -680,7 +684,7 @@ div[data-status="d"],
 .head_count {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 15px;
 }
 
 .buttons__edit {
@@ -691,13 +695,18 @@ div[data-status="d"],
   font-size: 12px;
   padding: 3px;
   border-radius: 5px;
-  border: 1px solid black;
-  background-color: white;
+  /* border: 1px solid black; */
+  background: rgb(205, 201, 201);
   cursor: pointer;
+  color: #444;
+  box-shadow: inset .1rem .1rem .3rem #c8d0e7,
+    inset -.1rem -.1rem .3rem #ffffff,
+    .1rem .1rem .2rem #777,
+    -.1rem -.1rem .2rem #aaa;
 }
 
 .button-card:hover {
-  background-color: rgb(205, 201, 201);
+  background-color: #aaa;
 }
 
 .text__btnCont {
@@ -763,7 +772,7 @@ div[data-status="d"],
 /* !_______________________________________ */
 .module__warning.open {
   display: block;
-  transition: 1s;
+  transition: 0.4s;
   opacity: 1;
 }
 
@@ -771,22 +780,22 @@ div[data-status="d"],
   color: #444;
   display: block;
   text-align: center;
-  /* width: 80%;
-  height: 70%; */
 }
 
 .warning__container {
+  font-size: 18px;
   width: 30em;
   height: 15em;
   grid-template-rows: 1fr 40px;
   padding: 30px;
+  align-items: center;
+
 }
 
 .button__container {
   display: flex;
   gap: 20px;
   justify-content: end;
-
 }
 
 .button.warning__button_ok,

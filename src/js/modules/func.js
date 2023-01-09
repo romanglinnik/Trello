@@ -4,35 +4,7 @@
 
 import { createNewCard } from "./render.js";
 
-let noteAll = [
-  {
-    id: 1,
-    title: "work",
-    content: "draw up a report",
-    user: "Ervin Howell",
-    data: "19.12.2022",
-    status: "a",
-    position: "todo",
-  },
-  {
-    id: 2,
-    title: "work",
-    content: "give a presentation",
-    user: "Clementine Bauch",
-    data: "19.12.2022",
-    status: "b",
-    position: "in progress",
-  },
-  {
-    id: 3,
-    title: "home",
-    content: "drink coffee",
-    user: "Glenna Reichert",
-    data: "19.12.2022",
-    status: "d",
-    position: "done",
-  },
-];
+let noteAll = [];
 // !_________________________________________________________
 // !_________________________________________________________
 
@@ -118,7 +90,7 @@ const sendRequest = function (method, url) {
 
 sendRequest("GET", userURL)
   .then((data) => userName(data))
-  .catch((error) => console.log(error));
+  .catch((error) => warningAlert("No user data received"));
 //!_______________________________________________
 //!_______________________________________________
 // функция поиска user в списке
@@ -198,7 +170,6 @@ export const openWindowEntryEdit = function (cardId) {
 export const openStatusMatrix = function (e) {
   const statusMatrix = document.querySelector(".matrix-window");
   statusMatrix.classList.add("open");
-  console.log(statusMatrix);
   colorStatusMatrix();
 };
 
@@ -472,7 +443,6 @@ const extractDataFromCard = function (cardId) {
       }
     }
   }
-  console.log("noteAll start", noteAll);
 };
 //!_____________________________________________________________________
 //!_____________________________________________________________________
@@ -501,7 +471,6 @@ const editCard = function (obj) {
       break;
   }
 };
-
 //!_____________________________________________________________________
 //!_____________________________________________________________________
 //функция сохранения информации после редактирования
@@ -565,7 +534,6 @@ export const editStatusNote = function (id, status) {
 let changeClassCards = function (item) {
   let inProgress = document.querySelector(".panel__progress");
   let done = document.querySelector(".panel__done");
-
   let btnLeft = dragItem.querySelector(".text__next-left");
   let btnRight = dragItem.querySelector(".text__next-right");
   let btnEdit = dragItem.querySelector(".buttons__edit");
@@ -739,6 +707,7 @@ const clearPanelDone = function () {
   const noteFilter = noteAll.filter((item) => item.position !== "done");
   noteAll = noteFilter;
   updateStorage();
+  showCountTodo();
 };
 
 export const deleteAll = function () {
@@ -749,9 +718,7 @@ export const deleteAll = function () {
       clearPanelDone
     );
   }
-  updateStorage();
 };
-
 // !_____________________________________________________
 // !_____________________________________________________
 // удаление карточки
@@ -760,6 +727,7 @@ export const removeCard = function (card, cardId) {
   const noteFilter = noteAll.filter((item) => item.id !== +cardId);
   noteAll = noteFilter;
   updateStorage();
+  showCountTodo();
 };
 
 export const deleteCard = function (event) {
@@ -858,16 +826,14 @@ export const moveToLeft = function (event) {
   const positionCard = noteAll[indexObj].position;
   switch (positionCard) {
     case "done":
-      if (lengthInProgress >= 6) 
-      {
+      if (lengthInProgress >= 6) {
         warningConfirm(
           "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи. переместить в todo?",
           moveToTodo,
           card,
           indexObj
         );
-      } else
-      {
+      } else {
         moveToInProgress(card, indexObj);
       }
       break;
@@ -911,9 +877,9 @@ const warningConfirm = function (text, func, param1, param2) {
   buttonContainer.append(btnNo, btnYes);
   btnYes.addEventListener("click", () => {
     func(param1, param2);
-    clearWarningWindow();
+    clearWarningConfirm();
   });
-  btnNo.addEventListener("click", clearWarningWindow);
+  btnNo.addEventListener("click", clearWarningConfirm);
 };
 //!_____________________________________________________
 // вызов модального окна с одной кнопкой
@@ -921,20 +887,30 @@ const warningAlert = function (text) {
   const warningModule = document.querySelector(".module__warning");
   const warningText = document.querySelector(".warning__text");
   const buttonContainer = document.querySelector(".button__container");
-  const btnYes = document.createElement("button");
+  const btnOk = document.createElement("button");
   warningText.innerText = text;
   warningModule.classList.add("open");
-  btnYes.classList.add("warning__button_ok");
-  btnYes.classList.add("button");
-  btnYes.innerText = "Yes";
-    buttonContainer.append(btnYes);
-  btnYes.addEventListener("click", () => {
-    clearWarningWindow();
+  btnOk.classList.add("warning__button_ok");
+  btnOk.classList.add("button");
+  btnOk.innerText = "Ok";
+  buttonContainer.append(btnOk);
+  btnOk.addEventListener("click", () => {
+    clearWarningAlert();
   });
 };
 // !___________________________________________________________
-// функция очистки модального окна warning
-const clearWarningWindow = function () {
+// функция очистки модального окна warning с одной кнопкой
+const clearWarningAlert = function () {
+  const warningModule = document.querySelector(".module__warning");
+  const warningText = document.querySelector(".warning__text");
+  const btnOk = document.querySelector(".warning__button_ok");
+  warningText.innerText = "";
+  warningModule.classList.remove("open");
+  btnOk.remove();
+};
+// !___________________________________________________________
+// функция очистки модального окна warning с двумя кнопками
+const clearWarningConfirm = function () {
   const warningModule = document.querySelector(".module__warning");
   const warningText = document.querySelector(".warning__text");
   const btnOk = document.querySelector(".warning__button_ok");
