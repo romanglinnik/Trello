@@ -632,7 +632,6 @@ export let dragAndDrop = function (item) {
         list.addEventListener("dragleave", function (e) {
           this.style.backgroundColor = `rgba(0,0,0,0)`;
         }); 
-        console.log(inProgress.classList)
         
         list.addEventListener("drop", function (e) {
           let id = +dragItem.getAttribute("data-key");
