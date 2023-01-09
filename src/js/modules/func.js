@@ -281,17 +281,11 @@ export const notErrorUser = function () {
 // !___________________________________________________
 
 //!______________добавление_данных_из_массива_________
-
 export const start = function () {
-  for (let i = noteAll.length -1; i >= 0; i--) {
+  for (let i = 0; i < noteAll.length; i++) {
     createNewCard(noteAll[i]);
   }
 };
-// export const start = function () {
-//   for (let i = 0; i < noteAll.length; i++) {
-//     createNewCard(noteAll[i]);
-//   }
-// };
 //!__________________________________________________________
 //!__________________________________________________________
 // проверка на "важность" и "срочность"
@@ -641,7 +635,7 @@ export let dragAndDrop = function (item) {
             e.preventDefault(); 
             this.style.backgroundColor = `rgba(0,0,0,0)`;
             changeClassCards(this);
-            this.append(dragItem);
+            this.prepend(dragItem);
 
         let id = +dragItem.getAttribute("data-key");
         let productId = noteAll.find((item) => item.id == id);
@@ -652,11 +646,11 @@ export let dragAndDrop = function (item) {
             this.style.backgroundColor = `rgba(0,0,0,0)`;
             if(productId.position == "todo"){
               warningAlert(
-              "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"
+              "Before adding a new task to ''In progress'', you need to complete the current tasks."
             );
             }else if(productId.position == "done"){
               warningConfirm(
-                "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи. переместить в todo?",
+                "Before adding a new task to In progress, you need to complete the current tasks. move to todo?",
                 moveToTodo,
                 dragItem,
                 indexObj
@@ -863,7 +857,7 @@ export const moveToLeft = function (event) {
     case "done":
       if (lengthInProgress >= 6) {
         warningConfirm(
-          "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи. переместить в todo?",
+          "Before adding a new task to ''In progress'', you need to complete the current tasks. <br> <b>Move to ''TODO''?</b>",
           moveToTodo,
           card,
           indexObj
@@ -884,7 +878,7 @@ const returnNumberCards = function () {
   const lengthInProgress = document.querySelectorAll(".card-progress").length;
   if (lengthInProgress >= 6) {
     warningAlert(
-      "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"
+      "Before adding a new task to ''In progress'', you need to complete the current tasks."
     );
     return false;
   }
@@ -902,7 +896,7 @@ const warningConfirm = function (text, func, param1, param2) {
   const buttonContainer = document.querySelector(".button__container");
   const btnYes = document.createElement("button");
   const btnNo = document.createElement("button");
-  warningText.innerText = text;
+  warningText.innerHTML = text;
   warningModule.classList.add("open");
   btnYes.classList.add("warning__button_ok");
   btnYes.classList.add("button");
@@ -951,7 +945,7 @@ const clearWarningConfirm = function () {
   const warningText = document.querySelector(".warning__text");
   const btnOk = document.querySelector(".warning__button_ok");
   const btnCancel = document.querySelector(".warning__button_cancel");
-  warningText.innerText = "";
+  warningText.innerHTML = "";
   warningModule.classList.remove("open");
   btnOk.remove();
   btnCancel.remove();

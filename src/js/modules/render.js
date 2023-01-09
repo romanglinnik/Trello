@@ -2,8 +2,6 @@
 
 import {
   getIdCard,
-  closeStatusMatrix,
-  openStatusMatrix,
   editStatusNote,
   deleteCard,
   moveToRight,
@@ -22,13 +20,6 @@ export let createNewCard = function (obj) {
 
   let headCount = document.createElement("div");
   headCount.classList.add("head_count");
-
-  // card.addEventListener("mouseover", () => {
-  //   card.classList.add("scale");
-  // });
-  // card.addEventListener("mouseout", () => {
-  //   card.classList.remove("scale");
-  // });
   // !___________________________________________________
   // !___________________________________________________
   let colorBlock = document.createElement("div");
@@ -256,7 +247,7 @@ export let createNewCard = function (obj) {
   time.classList.add("data__time");
   time.innerHTML = obj.data;
 
-  document.querySelector(".panel__todo").appendChild(card);
+  document.querySelector(".panel__todo").prepend(card);
   card.append(head, text, data);
   head.append(headCount, headBtn);
   headCount.append(colorBlock, title);
