@@ -249,7 +249,7 @@ export const addNewNote = function () {
 // вывод красных границ при неверном введении данных
 const errorTitle = function () {
   const title = document.querySelector(".entry__title");
-  title.classList.toggle("error");
+    title.classList.toggle("error");
 };
 export const notErrorTitle = function () {
   const title = document.querySelector(".entry__title");
@@ -258,7 +258,7 @@ export const notErrorTitle = function () {
 
 const errorContent = function () {
   const content = document.querySelector(".entry__content");
-  content.classList.toggle("error");
+    content.classList.toggle("error");
 };
 
 export const notErrorContent = function () {
@@ -268,7 +268,7 @@ export const notErrorContent = function () {
 
 const errorUser = function () {
   const user = document.querySelector(".user__select");
-  user.classList.toggle("error");
+    user.classList.toggle("error");
 };
 
 export const notErrorUser = function () {
@@ -561,9 +561,9 @@ let changeClassCards = function (item) {
   }
 };
 
-//!___________________Смена_position_в_локал_сторидж___
+//!___________________Смена_position_в_локал_сторидж___ 
 
-let changePosition = function (item, pst) {
+let changePosition = function(item, pst){
   let inProgress = document.querySelector(".panel__progress");
   let done = document.querySelector(".panel__done");
   let todo = document.querySelector(".panel__todo");
@@ -571,11 +571,12 @@ let changePosition = function (item, pst) {
   let id = +dragItem.getAttribute("data-key");
 
   if (item.classList == inProgress.classList && pst.id == id) {
-    pst.position = "in progress";
+    pst.position = "in progress"
+    
   } else if (item.classList == done.classList && pst.id == id) {
-    pst.position = "done";
-  } else if (item.classList == todo.classList && pst.id == id) {
-    pst.position = "todo";
+    pst.position = "done"
+  } else if(item.classList == todo.classList && pst.id == id) {
+    pst.position = "todo"
   }
   updateStorage();
 };
@@ -587,13 +588,17 @@ let dragItem = null;
 export let dragAndDrop = function () {
   let listItem = document.querySelectorAll(".card");
   let lists = document.querySelectorAll(".column__panel");
+  let inProgress = document.querySelector(".panel__progress");
+
 
   listItem.forEach(function (item) {
     let id = +item.getAttribute("data-key");
-    let productId = noteAll.find((item) => item.id === id);
+    let  productId = noteAll.find((item) => item.id === id);
+
     if (productId.id == id) {
       const item1 = item;
-
+      
+      
       item1.addEventListener("dragstart", (e) => {
         dragItem = item1;
 
@@ -606,11 +611,12 @@ export let dragAndDrop = function () {
           item1.classList.remove("hide");
           dragItem = null;
         }, 0);
-      });
-
-      for (let j = 0; j < lists.length; j++) {
+      }); 
+    }
+  });
+  for (let j = 0; j < lists.length; j++) {
         const list = lists[j];
-
+        
         list.addEventListener("dragover", (e) => e.preventDefault());
 
         list.addEventListener("dragenter", function (e) {
@@ -620,20 +626,36 @@ export let dragAndDrop = function () {
         });
         list.addEventListener("dragleave", function (e) {
           this.style.backgroundColor = `rgba(0,0,0,0)`;
-        });
+        }); 
+        console.log(inProgress.classList)
+        
         list.addEventListener("drop", function (e) {
-          e.preventDefault();
-          this.style.backgroundColor = `rgba(0,0,0,0)`;
+          if(this.querySelectorAll(".card-progress").length +1 <= 6 ){
+            // console.log(document.querySelectorAll(".card-progress").length)
+            e.preventDefault(); 
+            this.style.backgroundColor = `rgba(0,0,0,0)`;
+            changeClassCards(this);
+            this.append(dragItem);
 
-          changeClassCards(this);
-          this.append(dragItem);
-          changePosition(this, productId);
-          showCountTodo();
-        });
+            let id = +dragItem.getAttribute("data-key");
+            let  productId = noteAll.find((item) => item.id == id )
+            changePosition(this, productId);
+
+            showCountTodo();
+          }else {
+            this.style.backgroundColor = `rgba(0,0,0,0)`;
+            e.preventDefault(); 
+            console.log(document.querySelectorAll(".card-progress").length)
+            // alert("Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"); 
+            warningAlert(
+              "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"
+            );
+          } 
+        }); 
       }
-    }
-  });
+
 };
+
 
 //!___________________Счетчик_карточек_в_блоке___
 
@@ -857,6 +879,7 @@ const returnNumberCards = function () {
     return true;
   }
 };
+
 //!_____________________________________________________
 //!_____________________________________________________
 // вызов модального окна с двумя кнопками
