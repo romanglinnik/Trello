@@ -257,9 +257,10 @@ export const addNewNote = function () {
     checkNodeValue(user) &&
     checkUserValue(user)
   ) {
+    
     noteAll.unshift(note);
     createNewCard(note); //вызывается функция отрисовки колонок
-    dragAndDrop();
+    dragAndDrop(note);
     showCountTodo();
     updateStorage(); //вызвать функцию сохранения данных
     closeModuleEntry();
@@ -617,11 +618,12 @@ let changePosition = function(item, pst){
 
 let dragItem = null;
 
-export let dragAndDrop = function () {
+export let dragAndDrop = function (item) {
   let listItem = document.querySelectorAll(".card");
   let lists = document.querySelectorAll(".column__panel");
   let inProgress = document.querySelector(".panel__progress");
-
+  let done = document.querySelector(".panel__done");
+  let todo = document.querySelector(".panel__todo");
 
   listItem.forEach(function (item) {
     let id = +item.getAttribute("data-key");
@@ -662,8 +664,10 @@ export let dragAndDrop = function () {
         console.log(inProgress.classList)
         
         list.addEventListener("drop", function (e) {
+          let id = +dragItem.getAttribute("data-key");
+          let  productId = noteAll.find((item) => item.id == id )
+          let indexObj = noteAll.findIndex((element) => element.id === id);
           if(this.querySelectorAll(".card-progress").length +1 <= 6 ){
-            // console.log(document.querySelectorAll(".card-progress").length)
             e.preventDefault(); 
             this.style.backgroundColor = `rgba(0,0,0,0)`;
             changeClassCards(this);
@@ -674,14 +678,22 @@ export let dragAndDrop = function () {
             changePosition(this, productId);
 
             showCountTodo();
-          }else {
+          }else if(this.querySelectorAll(".card-progress").length +1 >= 6 && !item){
             this.style.backgroundColor = `rgba(0,0,0,0)`;
-            e.preventDefault(); 
-            console.log(document.querySelectorAll(".card-progress").length)
-            // alert("Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"); 
-            warningAlert(
+            if(productId.position == "todo"){
+              warningAlert(
               "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"
             );
+            }else if(productId.position == "done"){
+              warningConfirm(
+                "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи. переместить в todo?",
+                moveToTodo,
+                dragItem,
+                indexObj
+              );
+            }
+            
+            
           } 
         }); 
       }
