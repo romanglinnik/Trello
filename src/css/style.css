@@ -631,10 +631,11 @@ div[data-status="d"],
 /* !________Селекторы Карточки________________________________________ */
 
 .card {
-  width: 350px;
+  width: 320px;
   height: 164px;
   padding: 8px;
   border-radius: 10px;
+  font-weight: 600;
   margin: 0 auto;
   display: grid;
   row-gap: 5px;
@@ -653,17 +654,17 @@ div[data-status="d"],
 
 .card-todo {
   background-color: rgb(213, 232, 212);
-  border: 2px solid rgb(153, 171, 149);
+  /* border: 2px solid rgb(153, 171, 149); */
 }
 
 .card-progress {
   background-color: rgb(242, 245, 246);
-  border: 2px solid rgb(215, 223, 226);
+  /* border: 2px solid rgb(215, 223, 226); */
 }
 
 .card-done {
   background-color: rgb(188, 224, 231);
-  border: 2px solid rgb(149, 188, 196);
+  /* border: 2px solid rgb(149, 188, 196); */
 }
 
 .card__head,
@@ -692,11 +693,16 @@ div[data-status="d"],
 }
 
 .button-card {
-  font-size: 12px;
-  padding: 3px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: linear-gradient(rgb(208, 201, 201), rgb(177, 161, 161));
+  border: none;
+  color: #444;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 5px;
   border-radius: 5px;
-  /* border: 1px solid black; */
-  background: rgb(205, 201, 201);
+  /* border: 1px solid rgb(154, 140, 140); */
+  background-color: white;
   cursor: pointer;
   color: #444;
   box-shadow: inset .1rem .1rem .3rem #c8d0e7,
@@ -706,30 +712,33 @@ div[data-status="d"],
 }
 
 .button-card:hover {
-  background-color: #aaa;
+  background: rgb(151, 146, 146);
 }
 
 .text__btnCont {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 
 .text__next-left {
   padding: 9px 5px;
   display: none;
-  height: 30px;
+  height: 35px;
+  text-align: center;
 }
 
 .text__next-right {
   padding: 9px 5px;
-  height: 30px;
+  height: 35px;
+  text-align: center;
 }
 
 .text__description {
   font-size: 18px;
   align-self: center;
   height: 70px;
-  width: 270px;
+  width: 234px;
   word-wrap: break-word;
   overflow-y: auto;
   padding: 3px;
