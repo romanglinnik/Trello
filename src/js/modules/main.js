@@ -74,8 +74,6 @@ export const app = function () {
 
   document.querySelector(".user__select").addEventListener("dblclick", (e) => {
     const target = e.target.className;
-    console.log(e.target);
-    console.log(e);
     if (target !== "user__select") {
       return;
     }

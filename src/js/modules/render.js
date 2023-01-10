@@ -2,8 +2,6 @@
 
 import {
   getIdCard,
-  closeStatusMatrix,
-  openStatusMatrix,
   editStatusNote,
   deleteCard,
   moveToRight,
@@ -22,13 +20,6 @@ export let createNewCard = function (obj) {
 
   let headCount = document.createElement("div");
   headCount.classList.add("head_count");
-
-  // card.addEventListener("mouseover", () => {
-  //   card.classList.add("scale");
-  // });
-  // card.addEventListener("mouseout", () => {
-  //   card.classList.remove("scale");
-  // });
   // !___________________________________________________
   // !___________________________________________________
   let colorBlock = document.createElement("div");
@@ -49,8 +40,6 @@ export let createNewCard = function (obj) {
     const status = event.target.getAttribute("data-status");
     statusMatrix.classList.remove("open");
     editStatusNote(id, status);
-    console.log("id", id);
-    console.log("status", status);
   }); //закрывает матрицу
 
   statusMatrix.addEventListener("mouseover", () => {
@@ -64,8 +53,6 @@ export let createNewCard = function (obj) {
       .getAttribute("data-status");
     statusMatrix.classList.remove("open");
     editStatusNote(id, status);
-    console.log("id", id)
-    console.log("status", status)
   }); //закрывает матрицу
 
   const matrixName = document.createElement("h3");
@@ -180,7 +167,11 @@ export let createNewCard = function (obj) {
   }
   colorBlock.addEventListener("click", (event) => {
     const target = event.target.getAttribute("class");
-    if (target !== "head_color mark") {
+    const cardPosition = event.target.closest(".column__panel").getAttribute("class");
+    if (
+      target !== "head_color mark" ||
+      cardPosition == "column__panel panel__done"
+    ) {
       return;
     }
     {
@@ -256,7 +247,7 @@ export let createNewCard = function (obj) {
   time.classList.add("data__time");
   time.innerHTML = obj.data;
 
-  document.querySelector(".panel__todo").appendChild(card);
+  document.querySelector(".panel__todo").prepend(card);
   card.append(head, text, data);
   head.append(headCount, headBtn);
   headCount.append(colorBlock, title);

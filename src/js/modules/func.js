@@ -4,35 +4,7 @@
 
 import { createNewCard } from "./render.js";
 
-let noteAll = [
-  {
-    id: 1,
-    title: "work",
-    content: "draw up a report",
-    user: "Ervin Howell",
-    data: "19.12.2022",
-    status: "a",
-    position: "todo",
-  },
-  {
-    id: 2,
-    title: "work",
-    content: "give a presentation",
-    user: "Clementine Bauch",
-    data: "19.12.2022",
-    status: "b",
-    position: "in progress",
-  },
-  {
-    id: 3,
-    title: "home",
-    content: "drink coffee",
-    user: "Glenna Reichert",
-    data: "19.12.2022",
-    status: "d",
-    position: "done",
-  },
-];
+let noteAll = [];
 // !_________________________________________________________
 // !_________________________________________________________
 
@@ -98,7 +70,7 @@ const createUserList = function (obj) {
   userListItem.setAttribute("data-name", obj.name);
   userListItem.innerHTML = `${obj.name}`;
 
-  userList.append(userListItem);
+  userList.prepend(userListItem);
 };
 
 const userName = function (obj) {
@@ -118,7 +90,7 @@ const sendRequest = function (method, url) {
 
 sendRequest("GET", userURL)
   .then((data) => userName(data))
-  .catch((error) => console.log(error));
+  .catch((error) => warningAlert("No user data received"));
 //!_______________________________________________
 //!_______________________________________________
 // функция поиска user в списке
@@ -198,7 +170,6 @@ export const openWindowEntryEdit = function (cardId) {
 export const openStatusMatrix = function (e) {
   const statusMatrix = document.querySelector(".matrix-window");
   statusMatrix.classList.add("open");
-  console.log(statusMatrix);
   colorStatusMatrix();
 };
 
@@ -279,7 +250,7 @@ export const addNewNote = function () {
 // вывод красных границ при неверном введении данных
 const errorTitle = function () {
   const title = document.querySelector(".entry__title");
-    title.classList.toggle("error");
+  title.classList.toggle("error");
 };
 export const notErrorTitle = function () {
   const title = document.querySelector(".entry__title");
@@ -288,7 +259,7 @@ export const notErrorTitle = function () {
 
 const errorContent = function () {
   const content = document.querySelector(".entry__content");
-    content.classList.toggle("error");
+  content.classList.toggle("error");
 };
 
 export const notErrorContent = function () {
@@ -298,7 +269,7 @@ export const notErrorContent = function () {
 
 const errorUser = function () {
   const user = document.querySelector(".user__select");
-    user.classList.toggle("error");
+  user.classList.toggle("error");
 };
 
 export const notErrorUser = function () {
@@ -310,7 +281,6 @@ export const notErrorUser = function () {
 // !___________________________________________________
 
 //!______________добавление_данных_из_массива_________
-
 export const start = function () {
   for (let i = 0; i < noteAll.length; i++) {
     createNewCard(noteAll[i]);
@@ -473,7 +443,6 @@ const extractDataFromCard = function (cardId) {
       }
     }
   }
-  console.log("noteAll start", noteAll);
 };
 //!_____________________________________________________________________
 //!_____________________________________________________________________
@@ -502,7 +471,6 @@ const editCard = function (obj) {
       break;
   }
 };
-
 //!_____________________________________________________________________
 //!_____________________________________________________________________
 //функция сохранения информации после редактирования
@@ -566,7 +534,6 @@ export const editStatusNote = function (id, status) {
 let changeClassCards = function (item) {
   let inProgress = document.querySelector(".panel__progress");
   let done = document.querySelector(".panel__done");
-
   let btnLeft = dragItem.querySelector(".text__next-left");
   let btnRight = dragItem.querySelector(".text__next-right");
   let btnEdit = dragItem.querySelector(".buttons__edit");
@@ -594,9 +561,9 @@ let changeClassCards = function (item) {
   }
 };
 
-//!___________________Смена_position_в_локал_сторидж___ 
+//!___________________Смена_position_в_локал_сторидж___
 
-let changePosition = function(item, pst){
+let changePosition = function (item, pst) {
   let inProgress = document.querySelector(".panel__progress");
   let done = document.querySelector(".panel__done");
   let todo = document.querySelector(".panel__todo");
@@ -604,12 +571,11 @@ let changePosition = function(item, pst){
   let id = +dragItem.getAttribute("data-key");
 
   if (item.classList == inProgress.classList && pst.id == id) {
-    pst.position = "in progress"
-    
+    pst.position = "in progress";
   } else if (item.classList == done.classList && pst.id == id) {
-    pst.position = "done"
-  } else if(item.classList == todo.classList && pst.id == id) {
-    pst.position = "todo"
+    pst.position = "done";
+  } else if (item.classList == todo.classList && pst.id == id) {
+    pst.position = "todo";
   }
   updateStorage();
 };
@@ -627,12 +593,11 @@ export let dragAndDrop = function (item) {
 
   listItem.forEach(function (item) {
     let id = +item.getAttribute("data-key");
-    let  productId = noteAll.find((item) => item.id === id);
+    let productId = noteAll.find((item) => item.id === id);
 
     if (productId.id == id) {
       const item1 = item;
-      
-      
+
       item1.addEventListener("dragstart", (e) => {
         dragItem = item1;
 
@@ -645,13 +610,13 @@ export let dragAndDrop = function (item) {
           item1.classList.remove("hide");
           dragItem = null;
         }, 0);
-      }); 
+      });
     }
   });
   for (let j = 0; j < lists.length; j++) {
-        const list = lists[j];
-        
-        list.addEventListener("dragover", (e) => e.preventDefault());
+    const list = lists[j];
+
+    list.addEventListener("dragover", (e) => e.preventDefault());
 
         list.addEventListener("dragenter", function (e) {
           e.preventDefault();
@@ -661,7 +626,6 @@ export let dragAndDrop = function (item) {
         list.addEventListener("dragleave", function (e) {
           this.style.backgroundColor = `rgba(0,0,0,0)`;
         }); 
-        console.log(inProgress.classList)
         
         list.addEventListener("drop", function (e) {
           let id = +dragItem.getAttribute("data-key");
@@ -671,22 +635,22 @@ export let dragAndDrop = function (item) {
             e.preventDefault(); 
             this.style.backgroundColor = `rgba(0,0,0,0)`;
             changeClassCards(this);
-            this.append(dragItem);
+            this.prepend(dragItem);
 
-            let id = +dragItem.getAttribute("data-key");
-            let  productId = noteAll.find((item) => item.id == id )
-            changePosition(this, productId);
+        let id = +dragItem.getAttribute("data-key");
+        let productId = noteAll.find((item) => item.id == id);
+        changePosition(this, productId);
 
             showCountTodo();
           }else if(this.querySelectorAll(".card-progress").length +1 >= 6 && !item){
             this.style.backgroundColor = `rgba(0,0,0,0)`;
             if(productId.position == "todo"){
               warningAlert(
-              "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"
+              "Before adding a new task to ''In progress'', you need to complete the current tasks."
             );
             }else if(productId.position == "done"){
               warningConfirm(
-                "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи. переместить в todo?",
+                "Before adding a new task to In progress, you need to complete the current tasks. move to todo?",
                 moveToTodo,
                 dragItem,
                 indexObj
@@ -699,7 +663,6 @@ export let dragAndDrop = function (item) {
       }
 
 };
-
 
 //!___________________Счетчик_карточек_в_блоке___
 
@@ -734,7 +697,7 @@ export let checkPosishionCards = function () {
     let id = +item.getAttribute("data-key");
     let productId = noteAll.find((item) => item.id === id);
     if (productId.position == "todo") {
-      panelTodo.appendChild(item);
+      panelTodo.prepend(item);
       item.classList.remove("card-progress");
       item.classList.remove("card-done");
       item.classList.add("card-todo");
@@ -743,7 +706,7 @@ export let checkPosishionCards = function () {
       btnEdit.style.display = "inline-block";
     }
     if (productId.position == "in progress") {
-      panelInProgress.appendChild(item);
+      panelInProgress.prepend(item);
       item.classList.add("card-progress");
       item.classList.remove("card-todo");
       item.classList.remove("card-done");
@@ -752,7 +715,7 @@ export let checkPosishionCards = function () {
       btnEdit.style.display = "none";
     }
     if (productId.position == "done") {
-      panelDone.appendChild(item);
+      panelDone.prepend(item);
       item.classList.add("card-done");
       item.classList.remove("card-todo");
       item.classList.remove("card-progress");
@@ -773,6 +736,7 @@ const clearPanelDone = function () {
   const noteFilter = noteAll.filter((item) => item.position !== "done");
   noteAll = noteFilter;
   updateStorage();
+  showCountTodo();
 };
 
 export const deleteAll = function () {
@@ -783,9 +747,7 @@ export const deleteAll = function () {
       clearPanelDone
     );
   }
-  updateStorage();
 };
-
 // !_____________________________________________________
 // !_____________________________________________________
 // удаление карточки
@@ -794,6 +756,7 @@ export const removeCard = function (card, cardId) {
   const noteFilter = noteAll.filter((item) => item.id !== +cardId);
   noteAll = noteFilter;
   updateStorage();
+  showCountTodo();
 };
 
 export const deleteCard = function (event) {
@@ -892,16 +855,14 @@ export const moveToLeft = function (event) {
   const positionCard = noteAll[indexObj].position;
   switch (positionCard) {
     case "done":
-      if (lengthInProgress >= 6) 
-      {
+      if (lengthInProgress >= 6) {
         warningConfirm(
-          "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи. переместить в todo?",
+          "Before adding a new task to ''In progress'', you need to complete the current tasks. <br> <b>Move to ''TODO''?</b>",
           moveToTodo,
           card,
           indexObj
         );
-      } else
-      {
+      } else {
         moveToInProgress(card, indexObj);
       }
       break;
@@ -917,7 +878,7 @@ const returnNumberCards = function () {
   const lengthInProgress = document.querySelectorAll(".card-progress").length;
   if (lengthInProgress >= 6) {
     warningAlert(
-      "Прежде чем добавить в In progress новую задачу, необходимо выполнить текущие задачи"
+      "Before adding a new task to ''In progress'', you need to complete the current tasks."
     );
     return false;
   }
@@ -935,7 +896,7 @@ const warningConfirm = function (text, func, param1, param2) {
   const buttonContainer = document.querySelector(".button__container");
   const btnYes = document.createElement("button");
   const btnNo = document.createElement("button");
-  warningText.innerText = text;
+  warningText.innerHTML = text;
   warningModule.classList.add("open");
   btnYes.classList.add("warning__button_ok");
   btnYes.classList.add("button");
@@ -946,9 +907,9 @@ const warningConfirm = function (text, func, param1, param2) {
   buttonContainer.append(btnNo, btnYes);
   btnYes.addEventListener("click", () => {
     func(param1, param2);
-    clearWarningWindow();
+    clearWarningConfirm();
   });
-  btnNo.addEventListener("click", clearWarningWindow);
+  btnNo.addEventListener("click", clearWarningConfirm);
 };
 //!_____________________________________________________
 // вызов модального окна с одной кнопкой
@@ -956,25 +917,35 @@ const warningAlert = function (text) {
   const warningModule = document.querySelector(".module__warning");
   const warningText = document.querySelector(".warning__text");
   const buttonContainer = document.querySelector(".button__container");
-  const btnYes = document.createElement("button");
+  const btnOk = document.createElement("button");
   warningText.innerText = text;
   warningModule.classList.add("open");
-  btnYes.classList.add("warning__button_ok");
-  btnYes.classList.add("button");
-  btnYes.innerText = "Yes";
-    buttonContainer.append(btnYes);
-  btnYes.addEventListener("click", () => {
-    clearWarningWindow();
+  btnOk.classList.add("warning__button_ok");
+  btnOk.classList.add("button");
+  btnOk.innerText = "Ok";
+  buttonContainer.append(btnOk);
+  btnOk.addEventListener("click", () => {
+    clearWarningAlert();
   });
 };
 // !___________________________________________________________
-// функция очистки модального окна warning
-const clearWarningWindow = function () {
+// функция очистки модального окна warning с одной кнопкой
+const clearWarningAlert = function () {
+  const warningModule = document.querySelector(".module__warning");
+  const warningText = document.querySelector(".warning__text");
+  const btnOk = document.querySelector(".warning__button_ok");
+  warningText.innerText = "";
+  warningModule.classList.remove("open");
+  btnOk.remove();
+};
+// !___________________________________________________________
+// функция очистки модального окна warning с двумя кнопками
+const clearWarningConfirm = function () {
   const warningModule = document.querySelector(".module__warning");
   const warningText = document.querySelector(".warning__text");
   const btnOk = document.querySelector(".warning__button_ok");
   const btnCancel = document.querySelector(".warning__button_cancel");
-  warningText.innerText = "";
+  warningText.innerHTML = "";
   warningModule.classList.remove("open");
   btnOk.remove();
   btnCancel.remove();
